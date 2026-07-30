@@ -89,8 +89,23 @@ available any other way.
 | `/challenge <x>` | Adversary protocol against a claim |
 | `/connect` | Force connections between distant graph regions |
 | `/recall <x>` | Traverse the graph, not just search it |
+| `/council <x>` | Convene other models and mine where they disagree |
 | `/evolve` | Weekly — what should change about this system |
 | `/install <x>` | Scaffold a contract-compliant module |
+
+### On `/council`
+
+The one command that reaches outside this model. A model critiquing itself
+shares its own blind spots — self-critique catches sloppiness, not systematic
+error, and systematic error is the expensive kind.
+
+**Agreement between models is weak evidence; disagreement is strong evidence.**
+Convergence means the question was easy. A split locates the real uncertainty.
+
+Zero setup by default — `scripts/council.mjs` compiles a question plus the
+relevant graph region into a block for any chat interface, using existing
+subscriptions rather than API credit. It deliberately withholds any prior
+answer, because a second opinion that has seen the first is not independent.
 
 ---
 

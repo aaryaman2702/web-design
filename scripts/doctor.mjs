@@ -148,12 +148,14 @@ function loadRegistry() {
   const unbound = new Set();
 
   // Capability keys are two-space-indented under `capabilities:`.
+  // Underscores are legal in the verb half — `reason.second_opinion`.
+  const CAP = '[a-z][a-z_]*\\.[a-z][a-z_]*';
   const capBlock = text.split(/^capabilities:\s*$/m)[1] ?? '';
   const stop = capBlock.split(/^unbound:\s*$/m)[0];
-  for (const m of stop.matchAll(/^ {2}([a-z]+\.[a-z]+):\s*$/gm)) bound.add(m[1]);
+  for (const m of stop.matchAll(new RegExp(`^ {2}(${CAP}):\\s*$`, 'gm'))) bound.add(m[1]);
 
   const unboundBlock = text.split(/^unbound:\s*$/m)[1] ?? '';
-  for (const m of unboundBlock.matchAll(/^\s*-\s*([a-z]+\.[a-z]+)\s*$/gm)) unbound.add(m[1]);
+  for (const m of unboundBlock.matchAll(new RegExp(`^\\s*-\\s*(${CAP})\\s*$`, 'gm'))) unbound.add(m[1]);
 
   return { bound, unbound };
 }
@@ -171,8 +173,10 @@ function checkCapabilities() {
     const fm = frontmatter(readFileSync(f, 'utf8'));
     if (!fm) { errors.push(`MODULE  ${rel(f)} has no frontmatter.`); continue; }
 
+    // Presence, not truthiness — `review:` heads a nested block and so parses
+    // to an empty string. Absent is the failure; empty-because-nested is not.
     for (const field of ['module', 'purpose', 'review']) {
-      if (!fm[field] && name !== '_template') {
+      if (!(field in fm) && name !== '_template') {
         warnings.push(`MODULE  ${rel(f)} is missing "${field}".`);
       }
     }

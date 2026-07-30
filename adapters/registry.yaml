@@ -189,6 +189,68 @@ capabilities:
         tool: CronCreate
         notes: Session-scoped. Dies with the session; not for durable automation.
 
+  # ---- reasoning ----------------------------------------------------------
+  # Other models, as capabilities.
+  #
+  # These are not tools that do work — they are independent minds that can
+  # disagree. That distinction is the whole justification: a model critiquing
+  # itself shares its own blind spots, because the critique comes from the same
+  # training and the same failure modes. Genuine independence requires a
+  # different model. Constitution II is unenforceable without this.
+  #
+  # Three lanes, ordered by setup cost. The default costs nothing and works
+  # today.
+
+  reason.second_opinion:
+    primary: paste
+    adapters:
+      paste:
+        tool: Bash
+        command: node scripts/council.mjs "<question>"
+        setup: none
+        notes: >
+          Compiles the question plus the relevant graph region into a block to
+          paste into any chat interface. Uses existing subscriptions rather than
+          API credit. Zero setup, zero marginal cost, works with any model that
+          exists now or later — including ones with no API at all.
+
+      drive-bridge:
+        tool: mcp__Google_Drive__create_file
+        setup: none
+        notes: >
+          Publishes memory exports to Drive so a Drive-integrated assistant
+          reads the graph natively without pasting. Pairs with the paste lane.
+
+      openai-api:
+        tool: Bash
+        requires_env: OPENAI_API_KEY
+        metered: usd
+        setup: API key required
+        notes: >
+          Highest fidelity and scriptable, so it can run unattended inside a
+          panel. Billed separately from a consumer chat subscription — a Plus
+          plan does not include API credit.
+
+      gemini-api:
+        tool: Bash
+        requires_env: GEMINI_API_KEY
+        metered: usd
+        setup: API key required
+        notes: Same trade-off as above. Free tier exists but is rate-limited.
+
+  reason.adversary:
+    primary: paste
+    adapters:
+      paste:
+        tool: Bash
+        command: node scripts/council.mjs "<claim>" --adversary
+        setup: none
+        notes: >
+          A foreign model attacking a position is a stronger test than
+          self-critique, because it does not share the originating model's
+          priors. Prefer this over the internal adversary protocol for
+          high-stakes or irreversible decisions.
+
 # Capabilities with no adapter yet. Modules requiring these will fail cleanly
 # and report the gap by name, which is the correct behaviour — a named missing
 # capability is actionable, a silent substitution is not.
