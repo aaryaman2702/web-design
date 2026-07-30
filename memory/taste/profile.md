@@ -37,9 +37,28 @@ needs observed choices, and it has almost none.
 | density | 0 | — |
 | pacing | 0 | — |
 | copy | 1 | low |
-| concept | 2 | low |
+| concept | 3 | low |
 | interaction | 0 | — |
 | restraint | 1 | low |
+
+**Every craft dimension is still zero.** That is the headline. Typography,
+motion, colour, layout, density, pacing, interaction — no readings, while craft
+is the first mastery domain in `core/mission.md`.
+
+## What was deliberately not ingested
+
+A cinematic scroll-film skill in the repository (`n-skill-scroll-film`) contains
+dozens of confident aesthetic assertions — about easing, seams, grain, pacing,
+restraint. It would have filled every empty dimension above in a single pass.
+
+**It was not written by Aaryaman**, so none of it belongs here. Its content is
+recorded as external insight with attribution; the correction is
+`o-dream-2026-0730-correction`.
+
+The temptation is worth naming because it will recur: there is always some
+document nearby that would make this page look full. Taste evidence has to come
+from *his* choices, and there is no shortcut that does not quietly replace him
+with someone else.
 
 ---
 
