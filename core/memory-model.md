@@ -40,9 +40,9 @@ edges:
 `id` is permanent. Titles change, files move, ids do not — otherwise every edge
 in the graph rots the first time something gets renamed.
 
-Bodies also use `[[wikilinks]]` for soft association, which makes the graph
-render natively in Obsidian. Typed `edges` carry meaning and are what the engines
-traverse; wikilinks are for humans browsing.
+Bodies also use `[[wikilinks]]` for soft association, which any graph-rendering
+Markdown editor will visualise natively. Typed `edges` carry meaning and are what
+the engines traverse; wikilinks are for humans browsing.
 
 ---
 

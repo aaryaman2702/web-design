@@ -163,8 +163,9 @@ Nothing else.
 project. They speak only in capabilities. Tools are mortal; this system is not
 meant to be.
 
-**Test:** `grep -riE 'higgsfield|vercel|gmail|claude|obsidian|notion' core/ engines/`
-returns nothing. `scripts/doctor.mjs` enforces this and fails loudly.
+**Test:** `node scripts/doctor.mjs` scans the inner layers for capability-provider
+names and fails loudly on any hit. The banned list lives in the doctor, not here,
+so that naming a vendor in order to forbid it does not itself violate the rule.
 
 ---
 

@@ -73,9 +73,9 @@ review:
 ### Why each field exists
 
 **`requires`** is the whole point. A module that says `requires: [media.video]`
-keeps working when the video vendor changes. A module that says "use Higgsfield"
-becomes dead weight the day that subscription lapses — and worse, it fails
-*silently*, producing plausible instructions to call a tool that no longer
+keeps working when the video vendor changes. A module that names a specific
+vendor becomes dead weight the day that subscription lapses — and worse, it
+fails *silently*, producing plausible instructions to call a tool that no longer
 exists.
 
 **`engines`** is what prevents modules from becoming isolated systems. A design
@@ -114,16 +114,17 @@ An adapter binds a capability to a concrete tool. This is the *only* layer that
 knows vendors exist.
 
 ```yaml
-# adapters/registry.yaml
+# adapters/registry.yaml   — shape only; real vendor names live in that file
 capabilities:
   media.video:
-    primary: higgsfield
-    fallback: null
+    primary: vendor-a
+    fallback: vendor-b
     adapters:
-      higgsfield:
-        tool: mcp__Higgsfield__generate_video
+      vendor-a:
+        tool: <concrete tool identifier>
+        alias: <alternate identifier seen in the wild>
         metered: credits
-        notes: Pro plan. Check balance before batch work.
+        notes: Check balance before batch work.
 ```
 
 ### Resolution

@@ -1,0 +1,197 @@
+--- # JARVIS adapter registry
+#
+# The ONLY file in this system permitted to name a vendor, product, or tool.
+# Everything above this layer speaks in capabilities.
+#
+# When a tool changes, dies, or gets replaced: edit here. Nothing else.
+# That single property is what the whole layered architecture exists to buy.
+
+meta:
+  updated: 2026-07-30
+  contract: core/contracts.md
+
+  # Tool identifiers are UNSTABLE and must be verified, not trusted.
+  #
+  # Observed 2026-07-30: every connected server disconnected mid-session and
+  # reappeared under opaque UUID identifiers — mcp__Higgsfield__generate_video
+  # became mcp__0d585b3c-73d6-458f-84e5-b59a3d75279e__generate_video. Same
+  # capability, same account, different name, no warning.
+  #
+  # Resolution protocol, in order:
+  #   1. Try the recorded `tool` identifier
+  #   2. If unresolved, search the live tool list for one providing the same
+  #      capability (match on the verb suffix — `generate_video`, `search_threads`)
+  #   3. Use it, and record the drift in memory/episodes/observations/
+  #   4. Update this file so the next run doesn't repeat the search
+  #
+  # If NO adapter provides a required capability, report the missing capability
+  # by name and stop. Never improvise a substitute and never fabricate a call —
+  # a hallucinated tool call corrupts both the output and the record of what
+  # happened.
+
+capabilities:
+
+  # ---- web ----------------------------------------------------------------
+  web.search:
+    primary: firecrawl
+    adapters:
+      firecrawl:
+        tool: mcp__Firecrawl__firecrawl_search
+        alias: mcp__2c9a6892-ed5b-452b-a305-3935fdac3bd4__firecrawl_search
+    fallback: builtin
+    builtin: { tool: WebSearch }
+
+  web.fetch:
+    primary: firecrawl
+    adapters:
+      firecrawl:
+        tool: mcp__Firecrawl__firecrawl_scrape
+        alias: mcp__2c9a6892-ed5b-452b-a305-3935fdac3bd4__firecrawl_scrape
+    fallback: builtin
+    builtin: { tool: WebFetch }
+
+  web.research:
+    primary: firecrawl
+    adapters:
+      firecrawl:
+        tool: mcp__Firecrawl__firecrawl_agent
+        notes: Async. Poll with firecrawl_agent_status.
+
+  web.deploy:
+    primary: vercel
+    adapters:
+      vercel:
+        tool: mcp__Vercel__deploy_to_vercel
+        alias: mcp__1a38f99c-e5a6-484d-9603-e8f8a8ab6155__deploy_to_vercel
+
+  # ---- media --------------------------------------------------------------
+  # Metered. Check balance before batch work; log spend to episodes/runs/.
+  media.image:
+    primary: higgsfield
+    adapters:
+      higgsfield:
+        tool: mcp__Higgsfield__generate_image
+        alias: mcp__0d585b3c-73d6-458f-84e5-b59a3d75279e__generate_image
+        metered: credits
+
+  media.video:
+    primary: higgsfield
+    adapters:
+      higgsfield:
+        tool: mcp__Higgsfield__generate_video
+        alias: mcp__0d585b3c-73d6-458f-84e5-b59a3d75279e__generate_video
+        metered: credits
+        notes: >
+          Start-image chaining supports shot-to-shot continuity. Any
+          image-to-video engine accepting a start frame satisfies this
+          capability — the chain contract is what matters, not the vendor.
+
+  media.audio:
+    primary: higgsfield
+    adapters:
+      higgsfield:
+        tool: mcp__Higgsfield__generate_audio
+        metered: credits
+
+  media.3d:
+    primary: higgsfield
+    adapters:
+      higgsfield:
+        tool: mcp__Higgsfield__generate_3d
+        metered: credits
+
+  media.evaluate:
+    primary: higgsfield
+    adapters:
+      higgsfield:
+        tool: mcp__Higgsfield__virality_predictor
+        notes: External scoring signal. Treat as one input, never as a verdict.
+
+  # ---- documents ----------------------------------------------------------
+  doc.read:
+    primary: builtin
+    adapters:
+      builtin: { tool: Read, notes: "Skills: pdf, docx, xlsx, pptx" }
+
+  doc.write:
+    primary: builtin
+    adapters:
+      builtin: { tool: Write, notes: "Skills: docx, xlsx, pptx, pdf" }
+
+  doc.store:
+    primary: gdrive
+    adapters:
+      gdrive:
+        tool: mcp__Google_Drive__create_file
+        alias: mcp__f435a8ca-8b62-4d63-a631-0363736c93d0__create_file
+        notes: Also the bridge for making memory readable by other models.
+
+  # ---- communication ------------------------------------------------------
+  mail.read:
+    primary: gmail
+    adapters:
+      gmail:
+        tool: mcp__Gmail__search_threads
+        alias: mcp__1fe6df16-68d8-41d6-9249-bad7a036eb97__search_threads
+
+  mail.draft:
+    primary: gmail
+    adapters:
+      gmail:
+        tool: mcp__Gmail__create_draft
+        notes: Draft only. Sending is never automatic.
+
+  calendar.read:
+    primary: gcal
+    adapters:
+      gcal:
+        tool: mcp__Google_Calendar__list_events
+        alias: mcp__735d6323-c62c-46e1-a681-7b3d31c4999e__list_events
+
+  calendar.write:
+    primary: gcal
+    adapters:
+      gcal: { tool: mcp__Google_Calendar__create_event }
+
+  # ---- code ---------------------------------------------------------------
+  repo.read:
+    primary: git
+    adapters:
+      git: { tool: Bash }
+      github: { tool: mcp__github__get_file_contents }
+
+  repo.write:
+    primary: git
+    adapters:
+      git: { tool: Bash, notes: Commit on a branch. Never force-push shared history. }
+
+  repo.review:
+    primary: builtin
+    adapters:
+      builtin: { tool: Skill, notes: "Skills: code-review, security-review, simplify" }
+
+  # ---- data ---------------------------------------------------------------
+  data.visualise:
+    primary: builtin
+    adapters:
+      builtin: { tool: Skill, notes: "Skill: dataviz. Read before any chart." }
+
+  # ---- scheduling ---------------------------------------------------------
+  schedule.create:
+    primary: routines
+    adapters:
+      routines:
+        tool: mcp__claude-code-remote__create_trigger
+        notes: >
+          Cron is UTC — convert from IST (UTC+5:30) and shift day fields when
+          the conversion crosses midnight.
+      local:
+        tool: CronCreate
+        notes: Session-scoped. Dies with the session; not for durable automation.
+
+# Capabilities with no adapter yet. Modules requiring these will fail cleanly
+# and report the gap by name, which is the correct behaviour — a named missing
+# capability is actionable, a silent substitution is not.
+unbound:
+  - data.query
+  - social.publish
