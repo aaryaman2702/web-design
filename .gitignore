@@ -1,0 +1,5 @@
+node_modules/
+.DS_Store
+
+# Generated from the graph — regenerate with: node scripts/dashboard.mjs
+interface/panel.html

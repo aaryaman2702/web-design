@@ -1,53 +1,51 @@
-# Interface — deliberately empty
+# Interface — the instrument panel
 
-A visual layer was scoped for this build and is **intentionally not built yet.**
-This file records the reasoning so the decision can be revisited rather than
-forgotten.
+```bash
+node scripts/dashboard.mjs > interface/panel.html
+```
 
-## Why deferred
+Self-contained: no external requests, styles and script inline, renders locally
+in a browser and publishes as an Artifact unchanged. Generated output, so it is
+git-ignored — the graph is the source of truth, never the render.
 
-A dashboard renders state. The graph currently holds ten nodes, three taste
-judgments, and one decision — there is no state worth rendering. Building the UI
-now would produce a screen of empty panels and placeholder metrics, which is
-precisely the outcome ruled out:
+## The design thesis
 
-> "I don't want this to become a productivity dashboard."
+**Most instruments read zero, and the panel says so.**
 
-The failure is subtle and worth naming: a dashboard built over an empty graph
-does not stay empty. It gets filled with the things that are *easy* to
-display — counts, streaks, activity — and those metrics then quietly become what
-the system optimises for. Measuring activity is how a thinking partner degrades
-into a productivity tracker.
+That is the whole idea, and it is a deliberate inversion. A dashboard built over
+a sparse graph does not stay honest by accident — it gets filled with whatever is
+*easy* to display: counts, streaks, activity, hours saved. Those metrics then
+quietly become what the system optimises for, and measuring activity is exactly
+how a thinking partner degrades into a productivity tracker.
 
-## What would change this
+So the empty gauges are foregrounded rather than hidden. Zero taste predictions
+is the most important number on the page, because it is the one that says whether
+the system actually knows him yet.
 
-Build it when the engines have output worth looking at:
+## What it shows
 
-- Taste has ~20 judgments and a prediction accuracy worth plotting over time
-- Decisions has ~10 entries with resolved outcomes and real calibration data
-- The curiosity engine has a hit-rate history
-- The graph is large enough that traversal beats reading files directly
+Three things a panel does better than a terminal, and nothing else:
 
-That is a matter of weeks of real use, not months of building.
+1. **The graph, rendered.** Force-directed, no libraries. Node colour is type,
+   size is degree, **opacity is confidence** — so unverified knowledge literally
+   looks faint. Seeing a domain sitting isolated with no edges into the rest is
+   genuinely hard to notice from inside files.
+2. **Readings against targets.** Ten decisions before judgment is measurable.
+   Fifty taste judgments before the engine is predictive. The denominator is the
+   point.
+3. **Structural faults.** Orphans, stale beliefs, contradictions — surfaced,
+   not buried in a traversal.
 
-## What it should be when built
+## What it will never show
 
-Not a metrics wall. Three things a dashboard does better than a terminal:
+Streaks. Activity counts. Token spend. Task lists. Hours or money saved.
 
-1. **The graph, rendered.** Seeing the shape of what he knows, where the dense
-   regions are, and where a domain sits isolated with no edges into the rest —
-   that last one is genuinely hard to notice from inside files.
-2. **Calibration over time.** Decision accuracy and taste prediction accuracy as
-   curves. These are the two numbers that say whether the system is actually
-   learning, and both are much clearer as trends than as figures.
-3. **Contradictions, surfaced.** The `contradicts` edges, visible. The highest-
-   value signal in the graph, currently only findable by traversal.
+Anything that rewards motion over judgment. The metric a system displays becomes
+the thing it is optimised for, whether or not anyone intended that — and at this
+stage the binding constraint is learning rate, not throughput.
 
-Any wikilink-aware Markdown editor pointed at `memory/` gives roughly the first
-one for free, today, with no code.
+## Also worth doing
 
-## What it should never be
-
-Streaks. Activity counts. Token spend. Task lists. Anything that rewards motion
-over judgment — because the metric a system displays is the thing it will
-eventually be optimised for, whether or not anyone intended that.
+Point any wikilink-aware Markdown editor at `memory/`. Graph view renders the
+same structure natively, live, with no build step. The schema uses `[[wikilinks]]`
+specifically so that works for free.
