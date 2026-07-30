@@ -5,6 +5,9 @@ subtype: calibration
 title: Taste prediction accuracy
 created: 2026-07-30
 updated: 2026-07-30
+edges:
+  - {rel: part_of, to: n-taste-profile}
+  - {rel: evidence_for, to: n-jarvis-core}
 ---
 
 # Taste prediction accuracy

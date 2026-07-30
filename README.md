@@ -90,6 +90,8 @@ available any other way.
 | `/connect` | Force connections between distant graph regions |
 | `/recall <x>` | Traverse the graph, not just search it |
 | `/council <x>` | Convene other models and mine where they disagree |
+| `/dream` | Deep unprompted work on the graph — runs overnight |
+| `/ingest <x>` | Pull context from other models and tools into the graph |
 | `/evolve` | Weekly — what should change about this system |
 | `/install <x>` | Scaffold a contract-compliant module |
 
@@ -113,9 +115,17 @@ answer, because a second opinion that has seen the first is not independent.
 
 ```bash
 node scripts/doctor.mjs              # verify the architecture still holds
+node scripts/graph-report.mjs        # contradictions, orphans, bridges, stale
+node scripts/council.mjs "<q>"       # compile a question for another model
 node scripts/context-pack.mjs "x"    # export a graph region for any other model
 node scripts/context-pack.mjs --self # the standing profile pack
 ```
+
+**graph-report** is the structural read: nodes in explicit contradiction, pairs
+far enough apart that connecting them would be genuinely new, knowledge
+connected to nothing, beliefs past review. It found four orphans on its first
+run — the taste and calibration records, disconnected from everything, which is
+knowledge that cannot compound.
 
 **doctor** enforces layer purity — it fails the build if a vendor name appears
 above the adapter layer. It caught three violations in the files that *define*

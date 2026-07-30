@@ -6,6 +6,10 @@ title: Decision calibration record
 created: 2026-07-30
 updated: 2026-07-30
 confidence: unverified
+edges:
+  - {rel: part_of, to: n-goal-judgment}
+  - {rel: learned_from, to: d-2026-0730-01}
+  - {rel: evidence_for, to: n-jarvis-core}
 ---
 
 # Decision calibration

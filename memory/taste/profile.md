@@ -7,6 +7,9 @@ created: 2026-07-30
 updated: 2026-07-30
 confidence: unverified
 review: 2026-09-30
+edges:
+  - {rel: part_of, to: n-self-aaryaman}
+  - {rel: informs, to: n-goal-craft}
 ---
 
 # Taste profile

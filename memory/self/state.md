@@ -5,6 +5,9 @@ subtype: state
 title: Current state
 created: 2026-07-30
 updated: 2026-07-30
+edges:
+  - {rel: part_of, to: n-self-aaryaman}
+  - {rel: informs, to: n-jarvis-core}
 ---
 
 # Current state
@@ -56,3 +59,11 @@ goals, and cheaper to forget.
 - No modules built speculatively. Modules come from observed repetition — that
   is what the evolution engine is for.
 - No coupling to the current toolset beyond `adapters/registry.yaml`.
+- **No time-saved or money-saved metrics.** Tempting and common — assign an
+  hourly rate, multiply by automated hours, display the number. Rejected
+  because the metric a system displays becomes the thing it optimises for,
+  and hours-saved rewards *volume of automation* rather than *quality of
+  judgment*. At his stage the binding constraint is learning rate, not
+  throughput; a system optimising his throughput would quietly work against
+  the mission. Measure calibration and taste accuracy instead — those track
+  whether he is getting better, which is the actual objective.
