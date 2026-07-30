@@ -83,14 +83,20 @@ if (dreams.length) {
 
 /* ------------------------------------------------------------- instruments */
 
+// `good0` marks instruments where zero means "no problem" rather than "no
+// reading". Without it, a clean graph renders identically to an empty one —
+// good news styled as a warning, which is how a panel teaches you to ignore it.
+const tasteJudgments = tasteDims.reduce((s, d) => s + d.n, 0);
+
 const instruments = [
-  { label: 'Graph nodes', value: nodes.length, of: null, note: 'plain markdown, portable' },
-  { label: 'Typed edges', value: edgeList.length, of: null, note: 'relations, not folders' },
-  { label: 'Clusters', value: clusters, of: null, note: clusters === 1 ? 'fully connected' : 'disconnected regions' },
-  { label: 'Orphans', value: orphans.length, of: null, note: 'knowledge that cannot compound', warn: orphans.length > 0 },
-  { label: 'Contradictions', value: contradictions, of: null, note: 'sharpest signal in the graph' },
-  { label: 'Stale beliefs', value: stale.length, of: null, note: 'past review, still reasoned from', warn: stale.length > 0 },
-  { label: 'Taste judgments', value: count('taste') - 1, of: 50, note: 'ten useful, fifty predictive' },
+  { label: 'Graph nodes', value: nodes.length, note: 'plain markdown, portable' },
+  { label: 'Typed edges', value: edgeList.length, note: 'relations, not folders' },
+  { label: 'Clusters', value: clusters, note: clusters === 1 ? 'fully connected' : 'disconnected regions', warn: clusters > 1 },
+  { label: 'Orphans', value: orphans.length, good0: true, note: 'knowledge that cannot compound', warn: orphans.length > 0 },
+  { label: 'Stale beliefs', value: stale.length, good0: true, note: 'past review, still reasoned from', warn: stale.length > 0 },
+  { label: 'Contradictions', value: contradictions, good0: true, note: 'tension worth resolving — sharpest signal' },
+  { label: 'Taste judgments', value: tasteJudgments, of: 50, note: 'ten useful, fifty predictive' },
+  { label: 'Craft dimensions read', value: tasteDims.filter(d => d.n > 0 && !['concept', 'copy', 'restraint'].includes(d.name)).length, of: 7, note: 'typography, motion, colour, layout, density, pacing, interaction' },
   { label: 'Taste predictions', value: 0, of: 10, note: 'the number that says it knows you' },
   { label: 'Decisions logged', value: decisions.length, of: 10, note: 'judgment unmeasurable below ten' },
   { label: 'Decisions resolved', value: resolved, of: null, note: 'calibration needs outcomes' },
@@ -111,7 +117,8 @@ const graphData = {
 
 /* ------------------------------------------------------------------ render */
 
-const empty = instruments.filter(i => i.value === 0).length;
+// Only instruments awaiting a reading — not ones reading zero problems.
+const empty = instruments.filter(i => i.value === 0 && !i.good0).length;
 
 console.log(`<title>JARVIS — instrument panel</title>
 <style>
@@ -181,6 +188,7 @@ console.log(`<title>JARVIS — instrument panel</title>
   .reading .val{font-family:ui-monospace,SF Mono,Menlo,monospace;
     font-size:19px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
   .reading.zero .val{color:var(--amber)}
+  .reading.clean .val{color:var(--sage)}
   .reading.warn .val{color:var(--rust)}
   .reading .of{color:var(--ink-3);font-size:13px}
   .reading .note{grid-column:1/-1;font-size:12.5px;color:var(--ink-3);line-height:1.45}
@@ -233,11 +241,15 @@ console.log(`<title>JARVIS — instrument panel</title>
 
 <div class="cols">
   <div class="readings">
-    ${instruments.map(i => `<div class="reading${i.value === 0 ? ' zero' : ''}${i.warn ? ' warn' : ''}">
+    ${instruments.map(i => {
+      const awaiting = i.value === 0 && !i.good0;
+      const clean = i.value === 0 && i.good0;
+      return `<div class="reading${awaiting ? ' zero' : ''}${clean ? ' clean' : ''}${i.warn ? ' warn' : ''}">
       <span class="lab">${esc(i.label)}</span>
       <span class="val">${i.value}${i.of ? `<span class="of"> / ${i.of}</span>` : ''}</span>
-      <span class="note">${esc(i.note)}</span>
-    </div>`).join('\n    ')}
+      <span class="note">${esc(i.note)}${clean ? ' — none' : ''}</span>
+    </div>`;
+    }).join('\n    ')}
   </div>
 
   <div class="stack">
