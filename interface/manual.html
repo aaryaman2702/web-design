@@ -1,0 +1,425 @@
+<title>JARVIS — operator's manual</title>
+<style>
+  :root{
+    --paper:#F7F8FA; --ink:#141A22; --ink-2:#3D4854; --ink-3:#6B7683;
+    --rule:#DDE1E7; --panel:#FFFFFF;
+    --copper:#9A6B4F; --amber:#B58033; --rust:#A4483C; --sage:#5E7D6A;
+    --shadow:0 1px 2px rgba(20,26,34,.05),0 8px 24px -12px rgba(20,26,34,.12);
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+    --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    --mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --paper:#0F141A; --ink:#E4E8ED; --ink-2:#A8B2BD; --ink-3:#727D89;
+    --rule:#242C35; --panel:#161C24;
+    --copper:#C08D6C; --amber:#D0A055; --rust:#C96B5E; --sage:#7FA48B;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.6);
+  }}
+  :root[data-theme="light"]{
+    --paper:#F7F8FA; --ink:#141A22; --ink-2:#3D4854; --ink-3:#6B7683;
+    --rule:#DDE1E7; --panel:#FFFFFF;
+    --copper:#9A6B4F; --amber:#B58033; --rust:#A4483C; --sage:#5E7D6A;
+    --shadow:0 1px 2px rgba(20,26,34,.05),0 8px 24px -12px rgba(20,26,34,.12);
+  }
+  :root[data-theme="dark"]{
+    --paper:#0F141A; --ink:#E4E8ED; --ink-2:#A8B2BD; --ink-3:#727D89;
+    --rule:#242C35; --panel:#161C24;
+    --copper:#C08D6C; --amber:#D0A055; --rust:#C96B5E; --sage:#7FA48B;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.6);
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0}
+  .doc{background:var(--paper);color:var(--ink);font:400 16px/1.65 var(--sans);
+    padding:clamp(24px,5vw,64px)}
+  .col{max-width:840px;margin-inline:auto;display:flex;flex-direction:column;gap:52px}
+
+  h1{font-family:var(--serif);font-weight:400;font-size:clamp(32px,5vw,48px);
+    line-height:1.1;letter-spacing:-.02em;margin:0;text-wrap:balance}
+  h2{font-family:var(--serif);font-weight:400;font-size:clamp(23px,3vw,30px);
+    line-height:1.2;letter-spacing:-.015em;margin:0;text-wrap:balance}
+  h3{font-size:16px;font-weight:600;margin:0;letter-spacing:-.005em}
+  p{margin:0;max-width:68ch}
+  .eyebrow{font:500 11px/1 var(--mono);letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-3)}
+  .dim{color:var(--ink-2)}
+  section{display:flex;flex-direction:column;gap:18px}
+  section > .head{display:flex;flex-direction:column;gap:8px;
+    border-bottom:1px solid var(--rule);padding-bottom:12px}
+
+  code{font-family:var(--mono);font-size:.88em;
+    background:color-mix(in srgb,var(--ink) 7%,transparent);
+    padding:2px 6px;border-radius:3px;white-space:nowrap}
+  pre{margin:0;background:var(--panel);border:1px solid var(--rule);
+    border-radius:3px;padding:14px 16px;overflow-x:auto;
+    font-family:var(--mono);font-size:13.5px;line-height:1.65}
+  pre code{background:none;padding:0;white-space:pre}
+
+  table{width:100%;border-collapse:collapse;font-size:14.5px}
+  .scroll{overflow-x:auto;border:1px solid var(--rule);border-radius:3px;
+    background:var(--panel)}
+  th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--rule);
+    vertical-align:top}
+  th{font:500 10.5px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink-3);white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  td code{font-size:13px}
+  .ok{color:var(--sage);font-weight:600}
+  .no{color:var(--rust);font-weight:600}
+  .maybe{color:var(--amber);font-weight:600}
+
+  ol.steps{margin:0;padding:0;list-style:none;
+    display:flex;flex-direction:column;gap:2px;counter-reset:s}
+  ol.steps > li{counter-increment:s;display:grid;
+    grid-template-columns:auto 1fr auto;gap:6px 16px;align-items:baseline;
+    padding:16px 18px;background:var(--panel);
+    border:1px solid var(--rule);border-radius:3px}
+  ol.steps > li::before{content:counter(s);font-family:var(--mono);
+    font-size:12px;color:var(--copper);font-weight:600;
+    padding-top:3px}
+  ol.steps .t{font-weight:600;font-size:15.5px}
+  ol.steps .mins{font:500 11px/1 var(--mono);color:var(--ink-3);
+    white-space:nowrap;letter-spacing:.06em}
+  ol.steps .d{grid-column:2/-1;font-size:14.5px;color:var(--ink-2);
+    display:flex;flex-direction:column;gap:9px}
+  li.blocked{border-left:2px solid var(--rust)}
+  li.now{border-left:2px solid var(--copper)}
+
+  .layers{display:flex;flex-direction:column;gap:1px;background:var(--rule);
+    border:1px solid var(--rule);border-radius:3px;overflow:hidden}
+  .layer{background:var(--panel);padding:14px 18px;display:grid;
+    grid-template-columns:120px 1fr;gap:4px 18px;align-items:baseline}
+  @media (max-width:640px){.layer{grid-template-columns:1fr}}
+  .layer .n{font-family:var(--mono);font-size:13px;color:var(--copper);font-weight:600}
+  .layer .w{font-size:14.5px}
+  .layer .r{grid-column:2;font-size:13px;color:var(--ink-3)}
+  @media (max-width:640px){.layer .r{grid-column:1}}
+
+  .note{border:1px solid var(--rule);border-left:2px solid var(--amber);
+    background:color-mix(in srgb,var(--amber) 5%,var(--panel));
+    padding:15px 18px;border-radius:3px;font-size:14.5px;color:var(--ink-2)}
+  .note.bad{border-left-color:var(--rust);
+    background:color-mix(in srgb,var(--rust) 5%,var(--panel))}
+  .note.good{border-left-color:var(--sage);
+    background:color-mix(in srgb,var(--sage) 5%,var(--panel))}
+  .note b{color:var(--ink)}
+
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+  .box{border:1px solid var(--rule);border-radius:3px;background:var(--panel);
+    padding:16px 18px;display:flex;flex-direction:column;gap:7px}
+  .box p{font-size:14px;color:var(--ink-2)}
+  footer{border-top:1px solid var(--rule);padding-top:22px;font-size:13.5px;
+    color:var(--ink-3);line-height:1.7}
+</style>
+
+<div class="doc"><div class="col">
+
+<header style="display:flex;flex-direction:column;gap:12px">
+  <div class="eyebrow">Operator's manual · 2026-07-31</div>
+  <h1>JARVIS</h1>
+  <p class="dim" style="font-size:17.5px">A cognitive architecture, not an
+  assistant. 20 commits, 74 files, 7 engines, 12 commands, 22 capabilities,
+  <b>zero dependencies</b>. Everything below is what exists, how it works, and
+  the four things still waiting on you.</p>
+</header>
+
+<!-- ════════ WHAT YOU DO ════════ -->
+<section>
+  <div class="head">
+    <h2>What you have to do</h2>
+    <p class="dim">In order. The first two take about fifteen minutes together
+    and unblock most of the system.</p>
+  </div>
+
+  <ol class="steps">
+    <li class="now">
+      <span class="t">Answer the three treatment questions</span>
+      <span class="mins">~10 min</span>
+      <div class="d">
+        <p>Which of the three scroll-film treatments you'd ship, <b>why the other
+        two are wrong</b>, and what irritates you about the one you picked.</p>
+        <p>This is the highest-value single item in the system. The taste engine
+        has zero craft readings — every dimension that matters (typography,
+        motion, colour, layout, pacing) is empty. Your rejections carry more
+        information than your pick.</p>
+      </div>
+    </li>
+
+    <li class="now">
+      <span class="t">Answer the five open questions about you</span>
+      <span class="mins">~5 min</span>
+      <div class="d">
+        <p>At the bottom of <code>memory/self/profile.md</code>. Most of what
+        the system believes about you is <em>inferred</em>, not told — flagged
+        as such deliberately, because a profile that presents guesses as facts
+        produces years of confident, subtly wrong reasoning.</p>
+        <p>The board-exam question matters most: it changes every prioritisation
+        the system makes.</p>
+      </div>
+    </li>
+
+    <li class="blocked">
+      <span class="t">Approve the four scheduled routines</span>
+      <span class="mins">~1 min</span>
+      <div class="d">
+        <p>Attempted three times, blocked at the permission layer each time —
+        I can't self-grant it. Specs are in <code>scripts/routines.md</code>.</p>
+        <p>Capture 21:30 → dream 02:00 → brief 07:00 daily, plus evolution
+        Sunday 10:00, all IST. <b>They need an active Claude plan to fire</b> —
+        see the warning below.</p>
+      </div>
+    </li>
+
+    <li>
+      <span class="t">Point it at work you were doing anyway</span>
+      <span class="mins">ongoing</span>
+      <div class="d">
+        <p>Everything in the graph so far was produced <em>while building
+        JARVIS</em>. That's the open half of the first dream's finding — the
+        system still has no memory of your actual work.</p>
+        <p>Next real thing you build, run <code>/think</code> before and
+        <code>/capture</code> after. That's the whole habit.</p>
+      </div>
+    </li>
+  </ol>
+
+  <div class="note bad">
+    <b>Time-sensitive.</b> A cancellation notice shows Claude Pro access ending
+    <b>1 Aug 2026</b> — tomorrow. Scheduled routines run unattended and need an
+    active plan on whichever runtime executes them. Everything else here works
+    regardless; only the automations depend on it. Worth checking before you
+    arm them, so you don't end up trusting a schedule that silently stopped.
+  </div>
+</section>
+
+<!-- ════════ API KEYS ════════ -->
+<section>
+  <div class="head">
+    <h2>API keys you need</h2>
+    <p class="dim">Short answer: none. Longer answer below.</p>
+  </div>
+
+  <div class="note good">
+    <b>Nothing is required.</b> Every capability the system uses today runs
+    through connectors you've already authorised with OAuth — no keys, no
+    <code>.env</code>, no secrets in the repo. The scripts are zero-dependency
+    Node; there is no <code>npm install</code>.
+  </div>
+
+  <p class="dim">Exactly two keys are <em>optional</em>, and only for one thing:
+  letting <code>/council</code> call other models automatically instead of you
+  pasting.</p>
+
+  <div class="scroll"><table>
+    <tr><th>Key</th><th>Unlocks</th><th>Needed?</th><th>Reality</th></tr>
+    <tr>
+      <td><code>OPENAI_API_KEY</code></td>
+      <td>Automated second opinions inside a council panel</td>
+      <td><span class="maybe">Optional</span></td>
+      <td>Billed <b>separately</b> from ChatGPT Plus. A Plus subscription does
+      <em>not</em> include API credit.</td>
+    </tr>
+    <tr>
+      <td><code>GEMINI_API_KEY</code></td>
+      <td>Same, second panellist</td>
+      <td><span class="maybe">Optional</span></td>
+      <td>Same trade-off. A free tier exists but is rate-limited.</td>
+    </tr>
+  </table></div>
+
+  <p class="dim">Without them, <code>/council</code> uses the <b>paste lane</b>:
+  a script compiles your question plus the relevant slice of your graph into a
+  block you paste into ChatGPT or Gemini directly. Uses the subscriptions you
+  already pay for, costs nothing extra, and works with any model — including
+  ones with no API at all.</p>
+
+  <div class="note">
+    <b>Never put keys in the repo.</b> The memory graph is designed to travel
+    between tools, and that's only safe if it's clean by construction. If you
+    add keys, use environment variables — <code>core/memory-model.md</code>
+    forbids storing secrets, and it's a rule with teeth: anything written to
+    memory can end up pasted into another model.
+  </div>
+</section>
+
+<!-- ════════ HOW IT WORKS ════════ -->
+<section>
+  <div class="head">
+    <h2>How the system works</h2>
+    <p class="dim">Five layers, ordered by how fast they change. Everything
+    follows from that ordering.</p>
+  </div>
+
+  <div class="layers">
+    <div class="layer"><span class="n">core/</span><span class="w">Identity and cognition — the constitution, the mission, how it reasons, the graph schema</span><span class="r">changes yearly · names no tools</span></div>
+    <div class="layer"><span class="n">engines/</span><span class="w">Seven always-on cognitive processes. Not invoked — they <em>are</em> the thinking</span><span class="r">changes rarely · names no tools</span></div>
+    <div class="layer"><span class="n">modules/</span><span class="w">Capabilities. Contract-bound, hot-swappable, installed and removed freely</span><span class="r">changes freely · names no tools</span></div>
+    <div class="layer"><span class="n">adapters/</span><span class="w">One file mapping capabilities to actual tools</span><span class="r">the <b>only</b> layer that names a vendor</span></div>
+    <div class="layer"><span class="n">memory/</span><span class="w">The knowledge graph. Plain Markdown, typed frontmatter, typed edges</span><span class="r">grows forever · portable to anything</span></div>
+  </div>
+
+  <p class="dim">The rule that makes it survive: <b>a module declares
+  <code>requires: [media.video]</code>, never a vendor name.</b> The registry
+  resolves that to whatever tool provides it today. Swap the vendor in 2030 and
+  you edit one line; every module keeps working.</p>
+
+  <div class="note">
+    <b>This isn't theoretical.</b> Every connected service renamed itself
+    <b>three times</b> during the session that built this — roughly 170 tool
+    identifiers each time, no warning. Cost: nothing, because nothing above the
+    adapter layer knows those names exist. A system with tool names baked into
+    its modules wouldn't have crashed — it would have produced confident calls
+    to tools that no longer exist, which is worse, because it surfaces as
+    strange output instead of an error.
+  </div>
+
+  <h3 style="margin-top:12px">The seven engines</h3>
+  <div class="scroll"><table>
+    <tr><th>Engine</th><th>What it does</th><th>Fires</th></tr>
+    <tr><td><b>reflection</b></td><td>Turns what happened into what's known. Climbs observation → pattern → principle</td><td>end of real work</td></tr>
+    <tr><td><b>taste</b></td><td>Learns your aesthetic from choices. Stores the <em>reason</em>, never the instance. Predicts your reaction before showing you work</td><td>any craft work</td></tr>
+    <tr><td><b>decision</b></td><td>Journals choices with a <em>falsifiable expectation</em> written before the outcome, then grades them</td><td>strategic choices</td></tr>
+    <tr><td><b>idea</b></td><td>Forces connections between <em>distant</em> parts of the graph. Distance is the trick — nearby nodes produce ideas you've had</td><td>daily</td></tr>
+    <tr><td><b>opportunity</b></td><td>Scans for leverage, leaks, openings, asymmetry</td><td>daily</td></tr>
+    <tr><td><b>curiosity</b></td><td>Speaks unprompted — contradictions, convergences, drift. Tunes its own threshold from whether you engage</td><td>continuous</td></tr>
+    <tr><td><b>evolution</b></td><td>Improves the system itself. May patch engines and modules; <b>may not</b> rewrite the constitution or mission</td><td>weekly</td></tr>
+  </table></div>
+
+  <p class="dim">Two are worth singling out because almost nobody builds them.
+  <b>Taste</b> commits to a prediction before showing you work — a wrong
+  prediction is the most valuable signal available, because it locates a
+  specific wrong belief instead of vaguely adjusting a profile. <b>Decision</b>
+  demands the expectation in writing beforehand, because memory of your own past
+  decisions is systematically flattering.</p>
+</section>
+
+<!-- ════════ COMMANDS ════════ -->
+<section>
+  <div class="head">
+    <h2>The twelve commands</h2>
+    <p class="dim">Thin entry points. The intelligence lives in the engines and
+    modules, not here.</p>
+  </div>
+
+  <div class="scroll"><table>
+    <tr><th>Command</th><th>Does</th><th>Use when</th></tr>
+    <tr><td><code>/think &lt;x&gt;</code></td><td>Full pass — ground, diverge, critique, adversary, synthesise, reflect</td><td>anything that matters</td></tr>
+    <tr><td><code>/capture</code></td><td>Reflect and write to the graph</td><td>end of real work</td></tr>
+    <tr><td><code>/brief</code></td><td>State, one opportunity, one thing worth thinking about</td><td>morning</td></tr>
+    <tr><td><code>/decide &lt;x&gt;</code></td><td>Journal a choice with a falsifiable expectation</td><td>consequential + uncertain</td></tr>
+    <tr><td><code>/challenge &lt;x&gt;</code></td><td>Adversary protocol against a claim</td><td>you feel certain</td></tr>
+    <tr><td><code>/council &lt;x&gt;</code></td><td>Other models answer independently; mine the disagreement</td><td>irreversible calls</td></tr>
+    <tr><td><code>/connect</code></td><td>Force links between distant graph regions</td><td>looking for ideas</td></tr>
+    <tr><td><code>/recall &lt;x&gt;</code></td><td>Traverse the graph, not just search it</td><td>"what do I know about…"</td></tr>
+    <tr><td><code>/dream</code></td><td>Deep unprompted work on the graph</td><td>overnight, scheduled</td></tr>
+    <tr><td><code>/ingest &lt;x&gt;</code></td><td>Pull outside context in, distilled and attributed</td><td>after a council</td></tr>
+    <tr><td><code>/evolve</code></td><td>What should change about this system</td><td>weekly</td></tr>
+    <tr><td><code>/install &lt;x&gt;</code></td><td>Scaffold a contract-compliant module</td><td>work repeated 3×</td></tr>
+  </table></div>
+
+  <div class="note">
+    <b>The daily habit is two commands.</b> <code>/think</code> before something
+    that matters, <code>/capture</code> after. Everything else is optional or
+    scheduled. A system used twice a day beats an elaborate one used never.
+  </div>
+</section>
+
+<!-- ════════ TOOLS ════════ -->
+<section>
+  <div class="head">
+    <h2>Tools and capabilities</h2>
+    <p class="dim">22 capabilities bound, 2 deliberately unbound. Modules ask for
+    the left column; only <code>adapters/registry.yaml</code> knows the right.</p>
+  </div>
+
+  <div class="scroll"><table>
+    <tr><th>Capability</th><th>Provided by</th><th>Status</th></tr>
+    <tr><td><code>web.search · web.fetch · web.research</code></td><td>Firecrawl</td><td><span class="ok">connected</span></td></tr>
+    <tr><td><code>web.deploy</code></td><td>Vercel</td><td><span class="ok">connected</span></td></tr>
+    <tr><td><code>media.image · video · audio · 3d · evaluate</code></td><td>Higgsfield (Pro, 848 credits)</td><td><span class="ok">connected</span></td></tr>
+    <tr><td><code>mail.read · mail.draft</code></td><td>Gmail — <b>draft only, never sends</b></td><td><span class="ok">connected</span></td></tr>
+    <tr><td><code>calendar.read · calendar.write</code></td><td>Google Calendar</td><td><span class="ok">connected</span></td></tr>
+    <tr><td><code>doc.read · doc.write · doc.store</code></td><td>Built-in + Google Drive</td><td><span class="ok">connected</span></td></tr>
+    <tr><td><code>repo.read · repo.write · repo.review</code></td><td>git + GitHub</td><td><span class="ok">connected</span></td></tr>
+    <tr><td><code>data.visualise</code></td><td>Built-in</td><td><span class="ok">connected</span></td></tr>
+    <tr><td><code>schedule.create</code></td><td>Routines</td><td><span class="maybe">needs approval</span></td></tr>
+    <tr><td><code>reason.second_opinion · reason.adversary</code></td><td>ChatGPT / Gemini via paste, or API if keyed</td><td><span class="ok">paste lane live</span></td></tr>
+    <tr><td><code>data.query</code></td><td>—</td><td><span class="no">unbound</span></td></tr>
+    <tr><td><code>social.publish</code></td><td>—</td><td><span class="no">unbound</span></td></tr>
+  </table></div>
+
+  <p class="dim">The two unbound ones aren't broken. A module requiring them
+  fails cleanly and <b>names the missing capability</b> — which is actionable,
+  where a silent substitution would corrupt both the output and the record of
+  what happened.</p>
+
+  <h3 style="margin-top:12px">What it genuinely cannot do</h3>
+  <p class="dim">The thinking has no ceiling. The <em>doing</em> is exactly as
+  wide as that table. No banking, no phone calls, no posting to platforms you
+  haven't connected, nothing physical. It isn't always-on — it runs when you run
+  it, or when a routine fires. Extending it is deliberately cheap
+  (<code>/install</code> + one registry line), but "everything" is an
+  aspiration, not a spec.</p>
+</section>
+
+<!-- ════════ RUNNING ════════ -->
+<section>
+  <div class="head"><h2>Running it</h2></div>
+
+  <pre><code>git clone https://github.com/aaryaman2702/web-design.git
+cd web-design
+git checkout claude/personal-agentic-os-memory-3nsi26   # JARVIS lives here, not main
+
+node scripts/doctor.mjs        # verify the architecture holds → PASS</code></pre>
+
+  <p class="dim">Node 18+. No install step, no dependencies, nothing to build.
+  Then run Claude Code <b>from the repo root</b> — <code>CLAUDE.md</code> is the
+  boot loader and only fires if the session starts there.</p>
+
+  <div class="grid2">
+    <div class="box">
+      <h3>The scripts</h3>
+      <p><code>doctor.mjs</code> — fails the build if a vendor name leaks above
+      the adapter layer. Caught three violations in the files that <em>define</em>
+      the rule, on its first run.</p>
+      <p><code>graph-report.mjs</code> — contradictions, orphans, distant pairs,
+      stale beliefs. Found four orphans on its first run.</p>
+      <p><code>council.mjs</code> — compiles a question for another model.</p>
+      <p><code>context-pack.mjs</code> — exports a graph region for anything.</p>
+      <p><code>dashboard.mjs</code> — regenerates the instrument panel.</p>
+    </div>
+    <div class="box">
+      <h3>Two things worth doing</h3>
+      <p><b>Point Obsidian at <code>memory/</code>.</b> The schema uses
+      <code>[[wikilinks]]</code> specifically so graph view renders your
+      knowledge natively — live, no plugin, no build step.</p>
+      <p><b>Commit after capture.</b> Memory only persists if it's committed.
+      A <code>/capture</code> that writes nodes and never commits dies with the
+      container. The routine prompts handle this; by hand it's on you.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ WHEN IT BREAKS ════════ -->
+<section>
+  <div class="head"><h2>When something looks wrong</h2></div>
+  <div class="scroll"><table>
+    <tr><th>Symptom</th><th>What's happening</th><th>Fix</th></tr>
+    <tr><td>Doctor fails on layer purity</td><td>A vendor name leaked into core, engines, or a module</td><td>Move it to <code>adapters/registry.yaml</code></td></tr>
+    <tr><td>"Capability X not in registry"</td><td>A module requires something unbound</td><td>Add an adapter, or list it under <code>unbound:</code></td></tr>
+    <tr><td>A tool call fails or vanishes</td><td>Identifier drift — happens often</td><td>Find the tool providing the same capability, use it, update the registry alias</td></tr>
+    <tr><td>Dangling edge warnings</td><td>An edge points at a node that doesn't exist</td><td>Create it or remove the edge — never auto-deleted, since deleting history to clean a report is how a system loses its memory</td></tr>
+    <tr><td>Stale belief warnings</td><td>A node is past its review date</td><td>Re-confirm, revise, or supersede. Never silently keep</td></tr>
+    <tr><td>Output feels generic</td><td>The taste engine was skipped, or has no data</td><td>Currently the latter — see step 1</td></tr>
+  </table></div>
+</section>
+
+<footer>
+  <p>The failure mode worth watching: a system this elaborate that goes unused
+  is worth less than a crude one that runs daily — and the elaborateness makes
+  that failure harder to admit. <code>memory/graph/entities/n-jarvis-core.md</code>
+  records what would prove this worked and what would prove it failed, written
+  before the outcome, so it can be graded honestly rather than rationalised later.</p>
+</footer>
+
+</div></div>
