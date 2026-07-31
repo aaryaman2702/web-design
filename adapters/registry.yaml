@@ -64,6 +64,21 @@ capabilities:
         tool: mcp__Vercel__deploy_to_vercel
         alias: mcp__1a38f99c-e5a6-484d-9603-e8f8a8ab6155__deploy_to_vercel
 
+  # Extract a brand's visual system from a live site — logo, palette,
+  # typography, imagery. Directly useful for client work: start from what the
+  # brand already is rather than from a description of it, which is both faster
+  # and more faithful than reading a brand guideline back to someone.
+  web.brand:
+    primary: firecrawl
+    adapters:
+      firecrawl:
+        tool: mcp__Firecrawl__firecrawl_scrape
+        alias: mcp__2c9a6892-ed5b-452b-a305-3935fdac3bd4__firecrawl_scrape
+        notes: >
+          Request branding-oriented extraction rather than raw markup. Returns
+          the visual system without the surrounding page noise, which is the
+          whole point — raw HTML buries the four facts that matter.
+
   # ---- media --------------------------------------------------------------
   # Metered. Check balance before batch work; log spend to episodes/runs/.
   media.image:

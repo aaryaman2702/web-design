@@ -17,6 +17,11 @@ review:
   metric: What "working" means, measurably
   target: The threshold
   cadence: monthly
+
+verify:
+  evidence: What this run must produce to count as done
+  bounds: What it must not touch
+
 ---
 
 # Module name

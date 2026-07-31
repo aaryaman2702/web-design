@@ -17,6 +17,14 @@ review:
   metric: Share of ingested items that became a node still referenced a month later
   target: Above 25% — below that, it is importing noise
   cadence: monthly
+
+verify:
+  evidence: Every new node carries source, confidence, and at least one
+    edge. An orphan with no provenance means the run failed even if it
+    wrote files.
+  bounds: Never writes credentials. Never marks external testimony as
+    observed.
+
 ---
 
 # Ingest

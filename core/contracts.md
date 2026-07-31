@@ -67,6 +67,10 @@ review:
   metric: <what "working" means, measurably>
   target: <the threshold>
   cadence: monthly
+
+verify:                                # how a single run proves it finished
+  evidence: <what the run must produce to count as done>
+  bounds: <what it must not touch>
 ---
 ```
 
@@ -90,6 +94,20 @@ belief.
 **`review`** is the anti-rot mechanism. Every module must be falsifiable. A
 module that cannot state what "working" means cannot be evaluated, and the
 evolution engine will flag it rather than let it accumulate quietly.
+
+**`verify`** answers a different question from `review`, and the distinction
+matters. `review` asks *is this module worth keeping* over months. `verify` asks
+*did this particular run actually finish* — right now, checkably.
+
+Without it, "done" is self-reported. A run that produced nothing, or produced
+something plausible-looking and wrong, reports success identically to one that
+worked. `evidence` names the artifact that settles it — a file that exists, a
+check that passes, a number that moved. `bounds` names what the run must not
+touch, which is what makes an unattended run safe to leave alone.
+
+This is cheap to write and disproportionately valuable for anything scheduled.
+A module that runs at 2am with no verifiable completion criterion is a module
+whose failures nobody will notice for weeks.
 
 ### Installing
 

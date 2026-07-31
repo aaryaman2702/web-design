@@ -26,7 +26,11 @@ Keep it short. A state file that grows into a project archive stops being read.
 - **The profile was wrong and is now rebuilt from artifacts** (`e-2026-0731-01`).
   Employment, live projects, and collaborators are in the graph for the first
   time.
-- **Awaiting a taste reaction.** Prediction sealed at `ae88ca6`.
+- **First real craft taste judgment recorded** (`t-2026-0731-01`) — the 3D bottle
+  rejected as gimmicky, and the sharper finding underneath it: he is
+  anti-unconvincing, not anti-spectacle.
+- **Awaiting the treatment pick.** Prediction sealed at `ae88ca6`, still ungraded
+  — adjacent evidence is not the prediction resolving.
 - **Awaiting a constitution decision** — `q-2026-0731-constitution-vi`, proposed
   not applied.
 
@@ -41,9 +45,9 @@ and look. It did not get there on its own.
 
 ## Immediate next
 
-1. **Break of Dawn is the taste goldmine.** Months of versioned design decisions
-   — including a 3D-bottle variant kept alongside a plain one. Ask which shipped
-   and why. One real decision beats any hypothetical.
+1. **Break of Dawn hero, rebuilt.** He shipped without the 3D bottle because it
+   was unconvincing, and named better animation tooling as what changes that.
+   That is a concrete brief on real work — the best available next build.
 2. **Gather is live this week** and uses generated video. Rejected takes are the
    highest-grade taste evidence available, and that workflow produces them by
    the dozen.

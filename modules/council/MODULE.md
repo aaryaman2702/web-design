@@ -17,6 +17,13 @@ review:
   metric: Share of panels that surfaced a consideration the primary model missed
   target: Above 30% — below that, the panel is confirming rather than testing
   cadence: monthly
+
+verify:
+  evidence: At least two independent responses recorded, and the points
+    of disagreement named explicitly. A panel that only records agreement
+    did not do the work.
+  bounds: Never shows one model another's answer in second-opinion mode.
+
 ---
 
 # Council

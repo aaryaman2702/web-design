@@ -17,6 +17,13 @@ review:
   metric: Share of dreams producing something he engages with the next morning
   target: Above 40% — below that it is generating noise on a schedule
   cadence: monthly
+
+verify:
+  evidence: A dated file in episodes/observations/dream/ — or an explicit
+    "no findings" line. Silence without a record is indistinguishable
+    from a crashed run.
+  bounds: Never writes to core/. Never edits an existing episode.
+
 ---
 
 # Dream
