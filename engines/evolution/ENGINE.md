@@ -24,11 +24,38 @@ is the clearest signal in the system and the easiest to miss from inside it.
 
 → Scaffold the module.
 
-### 2. What underperformed?
-Every module declares a `review` metric. Which missed?
+### 2. What failed, went silent, or was never used?
 
-→ Patch the module, or retire it. A module nobody uses is not neutral — it is
-clutter that every future search has to step over.
+```bash
+node scripts/run-audit.mjs
+```
+
+This question used to be unanswerable. The engine asked *what underperformed*
+with no record of failure to read, so it could only assess things that ran
+visibly — which is the opposite of the problem. **The failures that matter are
+the quiet ones.**
+
+A scheduled job that silently stops firing looks exactly like a quiet week. You
+stop checking manually because you believe it is handled, and nobody notices for
+a month. That is the single most expensive failure mode in an automated system,
+and it is invisible without an audit.
+
+The audit reports four things:
+
+- **Silent** — scheduled, produced nothing in twice its cadence. Investigate
+  before assuming nothing happened.
+- **Never run** — built and unused. Not neutral: clutter every future search
+  steps over, and evidence a module was built speculatively rather than from
+  observed repetition.
+- **Unverified** — produced output but not the evidence its `verify` contract
+  promised. A run that reports success without producing its evidence has not
+  succeeded.
+- **Due assessment** — enough runs accumulated to grade against its target.
+
+→ Patch, or **retire**. Retiring a module is as valuable as fixing one, and
+considerably more likely to be the right answer. Resist the instinct to defend
+something because it took effort to build — that instinct is exactly why unused
+systems accumulate.
 
 ### 3. What should split?
 A module doing three things does all three adequately. Overloading shows up as

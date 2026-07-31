@@ -1,11 +1,11 @@
 # Scheduled routines
 
-Three automations, IST-timed. **Specified but not yet armed** — creating them
+**Four** automations, IST-timed. **Specified but not yet armed** — creating them
 requires an approval that has not been granted.
 
 Cron is evaluated in **UTC**. IST is UTC+5:30, so every time below is the IST
-target minus 5:30. None of the three cross midnight, so no day-field shifting is
-needed — but check that if you change the times.
+target minus 5:30. Three of the four stay on the same UTC date; the dream does
+not — see the note below.
 
 | Routine | IST | UTC cron | Session |
 |---|---|---|---|
@@ -114,3 +114,70 @@ Skip entirely if the graph has not changed since the last run.
 
 No notification — findings are picked up by the 07:00 brief. Waking someone at
 2am to read an insight would defeat the point.
+
+---
+
+## Autonomy policy
+
+*"An assistant that needs your permission for every step cannot work while you
+are asleep."*
+
+That is the whole reason scheduled runs exist, and it creates a real problem: a
+2am run that stops to ask a question has wasted the night. But a 2am run that
+does whatever it likes is worse. The resolution is deciding **in advance** which
+class each action falls into, rather than at 2am when nobody is awake to judge.
+
+Three tiers. Every action a scheduled run might take belongs to exactly one.
+
+### Proceed — do it, log it, do not ask
+
+Reversible, local, additive. Git is the undo.
+
+- Write memory nodes — episodes, insights, observations
+- Commit and push to the working branch
+- Read anything already authorised
+- Run the doctor, graph report, run audit
+- Regenerate derived output like the panel
+
+The test: **if it is wrong, can it be undone with `git revert` and nothing
+outside the repository noticed?** If yes, proceed. Asking permission for these
+is what makes automation useless.
+
+### Queue — write it down, surface at the next brief
+
+Needs his judgment but not his attention right now. The run continues; the item
+waits.
+
+- Proposed changes to the constitution or mission
+- A decision that needs *his* expectation written before it counts
+- A finding that contradicts something he has stated
+- Anything the module's `verify.bounds` forbids it from doing alone
+
+Queuing is the default for anything uncertain. A queued item costs one line in
+tomorrow's brief; a wrong autonomous action costs trust.
+
+### Never — not unattended, at any hour
+
+Irreversible, outward-facing, or metered. These wait for him regardless of how
+convenient it would be.
+
+- **Sending anything to another person** — email, message, comment. Drafting is
+  Proceed; sending is Never. This is why `mail.draft` exists as a capability and
+  `mail.send` does not.
+- **Publishing** anything externally visible
+- **Spending credits** or any metered resource
+- **Force-pushing**, rewriting history, deleting memory
+- **Anything touching someone else's data**
+
+The asymmetry is the point: the cost of a delayed action is bounded and the cost
+of an unrecoverable one is not.
+
+### Why this is written down rather than judged at runtime
+
+A model deciding at 2am whether something is risky will occasionally decide
+wrong, and the failure is unwitnessed. Deciding the *classes* in advance, while
+awake and unhurried, means the run only has to classify — which is a far easier
+judgment than evaluating consequences.
+
+Each module's `verify.bounds` names its specific prohibitions. This policy is
+the default underneath them.
