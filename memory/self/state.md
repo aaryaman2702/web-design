@@ -22,26 +22,42 @@ Keep it short. A state file that grows into a project archive stops being read.
 
 ## Active
 
-- **JARVIS itself.** Core, engines, and memory scaffold built. Not yet exercised
-  against real work, which is the only thing that will prove any of it.
+- **JARVIS.** Core, engines, memory, four modules, instrument panel. Exercised
+  against real work once — three scroll-film treatments built for taste
+  elicitation.
+- **Awaiting a taste reaction.** Prediction sealed at `ae88ca6`. This is the
+  single highest-value pending item in the system; the taste engine cannot
+  calibrate without it.
+
+## Day-two check
+
+The first dream found that the graph was entirely about itself, and recorded
+its own counter-argument: *day one is exactly when a graph should be empty of
+real work — it stops being fair on day two.*
+
+It is now day two. Honest assessment: **partially resolved.** Roughly eight
+nodes are now about craft and process rather than about this system — three
+external insights, two observed insights, one artifact entity, one taste
+signal, one work episode.
+
+But every one of them was produced *in the course of building JARVIS*. Nothing
+in the graph yet comes from work he was doing anyway. That is the distinction
+the finding was actually pointing at, and it is not closed.
 
 ## Immediate next
 
-The system is architecture without data. Everything below is about closing that
-gap — until it does, JARVIS is a well-designed empty room.
-
-1. **Confirm the profile.** `memory/self/profile.md` is mostly inference. The
-   open questions at the bottom are the highest-value gaps in the entire graph.
-2. **Feed the taste engine.** It has zero judgments. Show it work — his own,
-   things he admires, things he can't stand — and let it record the reasoning.
-   Ten real judgments make it useful; fifty make it predictive.
-3. **Log decisions as they happen.** The judgment domain cannot be measured
-   until roughly ten decisions carry written expectations.
-4. **Run it on real work.** Reflection, taste, and evolution all learn from
-   friction. They learn nothing from a system nobody uses.
+1. **The taste reaction.** Answer the three questions on the treatments page.
+   Ten minutes, unblocks the whole taste engine.
+2. **Confirm the profile.** `memory/self/profile.md` is mostly inference. The
+   open questions at the bottom remain the highest-value gaps in the graph.
+3. **Point it at real work.** Something he was doing regardless of this system.
+   That is what closes the day-two finding properly.
+4. **Log decisions as they happen.** Judgment is unmeasurable below ~10 entries.
 
 ## Blocked / needs Aaryaman
 
+- **Four routines need approval to arm** — attempted three times, blocked at the
+  permission layer. Specs in `scripts/routines.md`.
 - `?` Board-exam year and realistic weekly build window — changes all
   prioritisation
 - `?` Which mastery domain to push this year
