@@ -1,7 +1,21 @@
 # Scheduled routines
 
-**Four** automations, IST-timed. **Specified but not yet armed** — creating them
-requires an approval that has not been granted.
+**Four** automations, IST-timed. **All armed and live as of 2026-07-31.**
+
+| Routine | Trigger id | First fire (UTC) |
+|---|---|---|
+| Dream | `trig_01StL9APttrjhA5At6TCdzc6` | 2026-07-31 20:32 |
+| Morning brief | `trig_013ubk7b2643oUPPEKxAouDx` | 2026-08-01 01:30 |
+| Evening capture | `trig_016kaRd3FPjdF9gQUqdLk4UW` | 2026-08-01 16:00 |
+| Weekly evolution | `trig_01WjrbRGxvNamJSErzsHwqKc` | 2026-08-02 04:31 |
+
+> **The fired sessions carry no MCP connectors.** No mail, calendar, storage,
+> media, or web retrieval — only filesystem, shell, and git. All four routines
+> were designed around the graph and git, so all four still work. The one real
+> loss is that the brief cannot read his calendar or inbox; it reasons over the
+> graph alone. To change that, recreate the routine from the account's routines
+> interface, where connector grants are available. See
+> `memory/episodes/observations/tool-drift-2026-0731.md`.
 
 Cron is evaluated in **UTC**. IST is UTC+5:30, so every time below is the IST
 target minus 5:30. Three of the four stay on the same UTC date; the dream does
@@ -84,14 +98,20 @@ Push notification on.
 
 ---
 
-## Arming them
+## Managing them
 
-Ask for the routines to be created and approve the permission prompt. The full
-prompt text for each is in the session that built this; regenerating it from the
-descriptions above produces an equivalent result.
+All four are live. To change one, **update it in place** — a bad schedule or a
+sharpened prompt does not warrant delete-and-recreate, and updating preserves
+the run history, which is the only record of whether the routine works.
 
-To adjust later: change the cron, keep the prompt. A bad schedule does not need
-the routine deleted and recreated — updating in place preserves its run history.
+Watch for the failure that hides: a routine that silently stops firing looks
+exactly like a quiet week. `node scripts/run-audit.mjs` catches it — a module
+with no output in twice its cadence gets reported as **silent**. The weekly
+evolution pass runs this automatically, which is the point of having built it.
+
+If one needs retiring, retire it. A routine producing filler nobody reads is
+worse than no routine, because it trains him to skim — and then the real
+findings get skimmed too.
 
 ---
 
