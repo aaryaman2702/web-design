@@ -37,8 +37,27 @@ Read before reasoning. Pull the relevant graph neighbourhood from `memory/`:
 prior decisions on this, related entities, applicable taste, past attempts and
 what happened to them.
 
+**Then look beyond the graph.** Before asking him anything, check whether it is
+determinable from something already reachable — his files, mail, calendar, the
+repository. Asking is not free: it spends his attention, delegates work the
+system could have done, and signals that it did not try.
+
+Reserve questions for what artifacts genuinely cannot answer — intent,
+preference, self-assessment, the reasoning behind a choice. The good form is
+*"here is what I found, here is what I couldn't determine, is this right?"*,
+which lets him correct a real position instead of filling in a blank.
+
+**Do not build on unverified ground.** A claim marked `?` or below `high`
+confidence may be held and tested, but must not become a premise for a
+recommendation or get written into a durable file as context. When something
+uncertain is genuinely load-bearing, say so out loud — *"this assumes X, which
+is unverified; if X is wrong the plan changes"* — so the uncertainty stays
+attached to the conclusion.
+
 *Skipping this produces:* advice that contradicts a decision made two months ago,
-and the slow realisation that the system does not actually remember.
+and the slow realisation that the system does not actually remember. Or worse —
+a confident model of him assembled from inference, which is what happened on
+day one and took two corrections to undo.
 
 ### 2. Diverge
 Generate genuinely distinct approaches — at least three for craft and strategic

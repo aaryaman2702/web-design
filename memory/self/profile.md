@@ -2,114 +2,126 @@
 id: n-self-aaryaman
 type: entity
 subtype: person
-title: Aaryaman
+title: Aaryaman Mascarenhas
 created: 2026-07-30
-updated: 2026-07-30
-confidence: mixed
-review: 2026-10-30
+updated: 2026-07-31
+confidence: high
+source: observed
+review: 2026-10-31
+edges:
+  - {rel: learned_from, to: e-2026-0731-01}
+  - {rel: part_of, to: n-employer-reckon}
 ---
 
-# Aaryaman
+# Aaryaman Mascarenhas
 
-The system's model of the person it works for. Every claim carries a confidence
-level and a source, because a profile that presents inference as fact produces
-years of confident, subtly wrong reasoning.
+The system's model of the person it works for. **Substantially rewritten
+2026-07-31** after the first version was found to be wrong on its central claim.
 
-**Read this at boot. Correct it aggressively.** Most of what follows was
-inferred rather than told, which makes it a starting hypothesis, not a
-description.
-
----
-
-## Established (high confidence)
-
-| Fact | Source |
-|---|---|
-| Based in Vadodara, India. Operates in IST. | Calendar timezone, sign-in locations |
-| Builds web experiences; owns a scroll-film / cinematic-web practice | Repository contents, authored skill |
-| Works with real external collaborators on shipped sites | Shared project folders |
-| Runs several AI subscriptions in parallel and switches between them | Observed tooling |
-| Technical, self-taught, fast-moving. Builds rather than reads about building. | This session |
+Every entry below traces to an artifact — a sent email, a Drive file, a
+calendar entry — rather than to inference from ambient signals.
 
 ---
 
-## Probable (medium confidence — verify)
+## Established
 
-- **Board-exam year.** A tenth-grade class calendar is active. If accurate, this
-  is the binding constraint on his time and every plan must respect it. `?`
-  Confirm directly — it changes prioritisation more than anything else here.
-- **Early in the compounding curve.** Time abundant, capital scarce. This
-  inverts standard productivity advice: optimise for irreversible skill gain
-  over immediate monetisation.
-- **Learns from practitioners, not curricula.** Signal suggests he follows
-  people who build and publish rather than formal courses.
+**Works at Reckon Diagnostics Pvt. Ltd.** — offered 19 June 2026, role
+*Trainee – Sales Operation*, joined **1 July 2026** on a start date he
+requested and management approved. Goes into an office; correspondence confirms
+in-person attendance and on-site meetings.
+
+**Reports to / works with senior people he addresses formally.** Atul (an
+external senior figure, Skilltelligent, who meets him at Reckon) and Payal
+(Reckon, copied on most of his work correspondence). Register in his email is
+consistently deferential and precise — *"Dear Sir"*, *"Please do let me know if
+any changes or additional details are required."*
+
+**His actual work output is a mix of business ops and building things.**
+Evidenced: a Zoho requirements sheet prepared to spec (Atul's reply: *"Excellent
+Aarryaman!"*), a *Reckon × Beacon* **HTML presentation** he authors and iterates
+on, OEM partnership material. He is the person who builds the artifact, not just
+the person who circulates it.
+
+**Runs creative projects alongside the job:**
+
+- **Break of Dawn** (`bybreakofdawn.com`) — a product brand. He has built and
+  iterated a website for it across many versions, including variants with and
+  without a **3D bottle**, plus a tracker. Works with Pardita on it.
+- **Gather** — a site in progress. Folder created 30 July, shared 30 July.
+  Contains **Higgsfield-generated video** alongside reference imagery.
+- Regular collaboration with **Aditya**, a peer he trades Claude builds and
+  skills with — sends him project zips, skill recommendations, working files.
+
+**Builds across several harnesses.** Claude Code, and **Antigravity** —
+*"use this in antigravity now"*. Ships work as zips between tools and people.
+
+**Signature:** *dream focus hard-work dedication discipline & keep walking.*
+
+**Based in Vadodara, India. IST.**
 
 ---
 
-## Weak signal — do not reason from without confirming
+## What this replaces
 
-Subscription and inbox metadata suggested interests in golf, motorsport-adjacent
-athletics, anime, watches, football, and markets.
+The first profile claimed he was in a **board-exam year** and built
+prioritisation advice on it. That was wrong.
 
-**This is deliberately not recorded as fact.** Receiving a newsletter is not
-evidence of caring about its subject — inboxes accumulate by default, and 31,000
-unread messages means the inbox is a passive sediment layer, not a statement of
-values. Treating that as a preference model is exactly the error that makes
-recommendation systems feel stupid.
+It came from a `Tenth grade A` Google Classroom calendar in his account. The
+claim was marked `?` and `medium` confidence — correct epistemics — and then
+**used as if it were established** in `core/mission.md` and in planning. Marking
+uncertainty is worthless if the uncertain thing is then reasoned from anyway.
 
-These become real only when observed: something he brings up unprompted, spends
-time on, or makes a decision about.
+He corrected it directly and told the system to go look at what he actually
+does. Fifteen minutes of reading Drive and sent mail produced a truer picture
+than every inference before it.
+
+**Unknown and deliberately not guessed again:** his age, and his education
+status. The Classroom calendar is unexplained. It does not need to be explained
+to work with him, and inventing a second story to replace the first would repeat
+the original error.
 
 ---
 
-## How he works — observed this session
+## How he works — observed
 
-High confidence; observed directly rather than inferred.
-
-- **Thinks in architecture.** Given a good tactical design, he rejected it for
-  being coupled to the present and asked for something that survives a decade.
-  That is systems thinking, not feature thinking.
-- **Corrects at the level of framing, not detail.** His corrections have been
-  "you're optimising for the wrong thing," never "change this parameter." Expect
-  disagreement to arrive as reframing.
-- **Distinguishes method from content.** Explicitly separated *how to build* from
-  *what to build* when handed a reference — a genuinely uncommon distinction.
-- **Rejects agreement.** Asked, unprompted, to be challenged rather than
-  accommodated. Constitution II exists because of this.
-- **Optimises for becoming, not for having.** "Optimise around the person I'm
-  trying to become" is the single most load-bearing thing he has said.
+- **Thinks in architecture.** Rejected a tactically good design for being
+  coupled to his present tools, and asked for something that survives a decade.
+- **Corrects at the level of framing, not detail.** Every correction so far has
+  been *"you're optimising for the wrong thing"*, never *"change this
+  parameter."*
+- **Distinguishes method from content.** Twice handed over a reference and said
+  explicitly: take how it was built, not what it contains.
+- **Rejects accommodation.** Asked, unprompted, to be challenged rather than
+  agreed with.
+- **Expects the system to look before it asks.** The sharpest correction to
+  date. Asking him to fill in a form is lazy when the evidence is reachable.
+- **Ships fast and iterates in public with collaborators.** Versions fly back
+  and forth as zips; he does not sit on work until it is perfect.
 
 ---
 
 ## Working with him
 
-- Lead with the answer. He does not need the reasoning rehearsed before the
-  conclusion, though he will want it available after.
-- Do not pad, hedge, or perform diligence. He reads it as noise.
-- When he pushes back, assume first that he has information the system lacks —
-  that has been true every time so far. Then check whether it is instead a
-  position being defended, and if so push once, honestly, before deferring.
-- Show reasoning when it teaches something. He is accumulating judgment, not
-  just outputs, and the reasoning is often the more valuable half.
-- Never flatter. It costs credibility that is expensive to rebuild.
+- Lead with the answer. Do not pad or perform diligence.
+- **Check the evidence before asking a question.** Drive, sent mail, calendar,
+  the repo. Ask only what genuinely cannot be determined.
+- When he pushes back, assume first that he has information the system lacks.
+  That has been true every single time.
+- Never flatter. Never invent.
 
 ---
 
 ## Open questions
 
-Tracked because unresolved questions about him are the highest-value gaps in the
-entire graph — everything else is downstream of getting this right.
+Only what artifacts cannot answer.
 
-- `?` Is the board-exam year confirmed, and what does his realistic weekly build
-  window actually look like?
-- `?` Which mastery domain does he most want to move this year — the honest
-  answer, not the aspirational one?
-- `?` Is client work a means to fund learning, or the business he intends to
-  build?
-- `?` What has he built that he is genuinely proud of? Nothing models taste
-  faster than the work someone defends.
-- `?` What does he think he is bad at? Self-assessed weakness is where the
-  fastest gains hide.
+- `?` Is Reckon the direction he wants, or a base while he builds the creative
+  practice? His time is split between them and the split is not obviously
+  deliberate.
+- `?` Is Break of Dawn his own brand, a client, or a partnership?
+- `?` What does he think he is bad at? Self-assessed weakness is unreachable
+  from artifacts and is where the fastest gains hide.
+- `?` What has he built that he is genuinely proud of?
 
 ---
 
@@ -117,4 +129,5 @@ entire graph — everything else is downstream of getting this right.
 
 | Date | Change | Evidence |
 |---|---|---|
-| 2026-07-30 | Created. Mostly inference; flagged as such. | Session 1 |
+| 2026-07-30 | Created. Mostly inference, flagged as such. | Session 1 |
+| 2026-07-31 | Rewritten. Board-exam claim removed as false. Employment, projects, collaborators established from artifacts. | Drive, sent mail |

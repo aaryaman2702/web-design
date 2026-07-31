@@ -22,56 +22,55 @@ Keep it short. A state file that grows into a project archive stops being read.
 
 ## Active
 
-- **JARVIS.** Core, engines, memory, four modules, instrument panel. Exercised
-  against real work once — three scroll-film treatments built for taste
-  elicitation.
-- **Awaiting a taste reaction.** Prediction sealed at `ae88ca6`. This is the
-  single highest-value pending item in the system; the taste engine cannot
-  calibrate without it.
+- **JARVIS.** Core, engines, memory, four modules, instrument panel, manual.
+- **The profile was wrong and is now rebuilt from artifacts** (`e-2026-0731-01`).
+  Employment, live projects, and collaborators are in the graph for the first
+  time.
+- **Awaiting a taste reaction.** Prediction sealed at `ae88ca6`.
+- **Awaiting a constitution decision** — `q-2026-0731-constitution-vi`, proposed
+  not applied.
 
 ## Day-two check
 
-The first dream found that the graph was entirely about itself, and recorded
-its own counter-argument: *day one is exactly when a graph should be empty of
-real work — it stops being fair on day two.*
+Closed. The first dream found the graph was entirely about itself and gave
+itself until day two. It now holds an employer, two real projects, and named
+collaborators that exist independently of this system.
 
-It is now day two. Honest assessment: **partially resolved.** Roughly eight
-nodes are now about craft and process rather than about this system — three
-external insights, two observed insights, one artifact entity, one taste
-signal, one work episode.
-
-But every one of them was produced *in the course of building JARVIS*. Nothing
-in the graph yet comes from work he was doing anyway. That is the distinction
-the finding was actually pointing at, and it is not closed.
+Worth recording honestly: that only happened because he told the system to go
+and look. It did not get there on its own.
 
 ## Immediate next
 
-1. **The taste reaction.** Answer the three questions on the treatments page.
-   Ten minutes, unblocks the whole taste engine.
-2. **Confirm the profile.** `memory/self/profile.md` is mostly inference. The
-   open questions at the bottom remain the highest-value gaps in the graph.
-3. **Point it at real work.** Something he was doing regardless of this system.
-   That is what closes the day-two finding properly.
-4. **Log decisions as they happen.** Judgment is unmeasurable below ~10 entries.
+1. **Break of Dawn is the taste goldmine.** Months of versioned design decisions
+   — including a 3D-bottle variant kept alongside a plain one. Ask which shipped
+   and why. One real decision beats any hypothetical.
+2. **Gather is live this week** and uses generated video. Rejected takes are the
+   highest-grade taste evidence available, and that workflow produces them by
+   the dozen.
+3. **Capture the job.** Business was recorded as his weakest domain with no
+   route in — he is inside a commercial organisation five days a week. The
+   learning is happening and evaporating. One captured business problem a week
+   would change that.
+4. **Decide the constitution amendment.**
 
 ## Blocked / needs Aaryaman
 
-- **Four routines need approval to arm** — attempted three times, blocked at the
+- **Four routines need approval to arm** — three attempts, blocked at the
   permission layer. Specs in `scripts/routines.md`.
-- `?` Board-exam year and realistic weekly build window — changes all
-  prioritisation
-- `?` Which mastery domain to push this year
-- Scheduled automations need an active plan on whichever runtime executes them;
-  verify before relying on unattended runs
+- Constitution VI amendment — proposed, awaiting decision.
+- `?` Is Reckon the direction, or a base while the creative practice grows?
+- `?` Is Break of Dawn his brand, a client, or a partnership?
+- Scheduled automations need an active plan on whichever runtime executes them.
 
 ## Not doing
 
 Recorded so it stops being reconsidered. Deliberate non-goals are as useful as
 goals, and cheaper to forget.
 
-- No dashboard until the engines have data worth displaying. A dashboard over an
-  empty graph is decoration, and Aaryaman explicitly ruled out becoming a
-  productivity dashboard.
+- No dashboard metric that rewards activity. The panel exists, but it shows
+  structure and calibration only — gauges awaiting readings are foregrounded
+  rather than filled with whatever is easy to display. The rule that survived
+  is the one that mattered.
 - No modules built speculatively. Modules come from observed repetition — that
   is what the evolution engine is for.
 - No coupling to the current toolset beyond `adapters/registry.yaml`.

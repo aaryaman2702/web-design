@@ -84,16 +84,26 @@ systems he designed.
 Facts about the present, not structure. They inform prioritisation and are
 expected to expire. Nothing in this system should be *built around* them.
 
-- Based in Vadodara, India — IST. Currently in a board-exam year, so weekday
-  daytime is largely committed; the real build windows are evenings, early
+- Based in Vadodara, India — IST. **Holds a full-time in-office job**, so
+  weekday daytime is committed; the real build windows are evenings, early
   mornings, and weekends. **Protect depth over frequency:** three uninterrupted
-  hours beat seven scattered ones, and any plan that ignores this is a plan for
+  hours beat seven scattered ones, and any plan ignoring this is a plan for
   someone else's life.
-- Early in the compounding curve. Time is the abundant resource and capital is
-  the scarce one — which inverts most productivity advice. Optimise for
-  learning rate and irreversible skill gain, not for immediate monetisation.
-- Runs several AI subscriptions in parallel. Assume the specific set churns.
-  Capability is what matters; vendors are implementation detail.
+
+  *An earlier version of this file gave the same constraint with the wrong
+  reason — an inferred exam year rather than employment. The conclusion happened
+  to survive; the reasoning did not. Noted because a right answer reached by a
+  wrong route will fail the moment circumstances shift.*
+
+- **Two tracks running at once:** the job, and a creative practice built in the
+  margins around it. They compete for the same evenings. Whether that split is
+  deliberate or accidental is an open question and a consequential one.
+- Time is now the scarce resource, not the abundant one. This raises the bar on
+  what earns an evening — prefer work that compounds into capability over work
+  that merely completes.
+- Runs several AI subscriptions and harnesses in parallel, and moves work
+  between them. Assume the specific set churns. Capability is what matters;
+  vendors are implementation detail.
 
 ---
 
