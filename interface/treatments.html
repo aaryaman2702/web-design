@@ -1,0 +1,472 @@
+<title>Descent — three treatments</title>
+<style>
+  :root{
+    --ink:#0B0D10; --bone:#E8E4DC; --bone-2:#9A968E; --bone-3:#5C5A56;
+    --brass:#B8925A; --rule:#1E2228;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+    --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    --mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0}
+  .doc{background:var(--ink);color:var(--bone);font:400 16px/1.65 var(--sans);
+    overflow-x:hidden}
+
+  .pad{padding-inline:clamp(20px,6vw,72px)}
+  .col{max-width:760px;margin-inline:auto}
+  .eyebrow{font:500 11px/1 var(--mono);letter-spacing:.16em;
+    text-transform:uppercase;color:var(--brass)}
+  h1{font-family:var(--serif);font-weight:400;font-size:clamp(38px,7vw,76px);
+    line-height:1.04;letter-spacing:-.02em;margin:0;text-wrap:balance}
+  h2{font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.6vw,38px);
+    line-height:1.12;letter-spacing:-.015em;margin:0;text-wrap:balance}
+  p{margin:0;max-width:64ch}
+  .dim{color:var(--bone-2)}
+
+  /* ---------- masthead ---------- */
+  .mast{min-height:82vh;display:flex;flex-direction:column;justify-content:center;
+    gap:28px;border-bottom:1px solid var(--rule);padding-block:14vh 10vh}
+  .brief{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:26px;margin-top:16px}
+  .brief div{display:flex;flex-direction:column;gap:5px}
+  .brief dt{font:500 10.5px/1 var(--mono);letter-spacing:.14em;
+    text-transform:uppercase;color:var(--bone-3)}
+  .brief dd{margin:0;font-size:14.5px;color:var(--bone-2)}
+
+  /* ---------- treatment scaffolding ---------- */
+  .treat{position:relative;height:340vh}
+  .stage{position:sticky;top:0;height:100vh;overflow:hidden;
+    display:grid;place-items:center}
+  .stage canvas{position:absolute;inset:0;width:100%;height:100%}
+  .stagewrap{position:relative;width:100%;height:100%}
+
+  .card{position:relative;z-index:5;max-width:min(560px,86vw);
+    display:flex;flex-direction:column;gap:14px;padding:26px 28px;
+    border:1px solid var(--rule);border-radius:2px;
+    background:rgba(11,13,16,.72);backdrop-filter:blur(14px)}
+  .card .pos{font-size:15px;line-height:1.6}
+  .card .let{font-family:var(--mono);font-size:12px;letter-spacing:.16em;
+    color:var(--brass)}
+  .specs{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+  .specs span{font:500 10.5px/1 var(--mono);letter-spacing:.08em;
+    text-transform:uppercase;padding:5px 8px;border:1px solid var(--rule);
+    border-radius:2px;color:var(--bone-3)}
+
+  /* ---------- A · instrument ---------- */
+  .a .card{background:rgba(6,10,12,.78);border-color:#14262B}
+  .a .let{color:#5FD3D8}
+  .a .stagewrap{background:#060A0C}
+
+  /* ---------- B · dive ---------- */
+  .b .stagewrap{background:#050A14}
+  .b .let{color:#E8C99B}
+  .b .card{background:rgba(5,10,20,.6);border-color:#16243A}
+
+  /* ---------- C · log ---------- */
+  .c .stagewrap{background:#EDE8DE}
+  .c .card{background:rgba(237,232,222,.9);border-color:#CFC7B8;color:#1E1B16}
+  .c .let{color:#8A5A2B}
+  .c .specs span{border-color:#CFC7B8;color:#6E675C}
+  .logsheet{position:absolute;inset:0;padding:clamp(24px,6vw,80px);
+    color:#1E1B16;font-family:var(--serif);overflow:hidden}
+  .entry{position:absolute;max-width:min(430px,72vw);opacity:0;
+    transform:translateY(14px)}
+  .entry .stamp{font:500 10.5px/1 var(--mono);letter-spacing:.14em;
+    color:#8A5A2B;margin-bottom:7px;text-transform:uppercase}
+  .entry .txt{font-size:clamp(16px,2vw,20px);line-height:1.5}
+  .entry .hand{font-style:italic;color:#5C5346;font-size:15px;margin-top:8px}
+  .plate{position:absolute;background:#CFC7B8;border:6px solid #FAF7F1;
+    box-shadow:0 8px 22px rgba(30,27,22,.22);opacity:0}
+
+  /* ---------- decision rail ---------- */
+  .rail{border-top:1px solid var(--rule);padding-block:clamp(56px,9vw,110px);
+    display:flex;flex-direction:column;gap:40px}
+  .three{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:1px;background:var(--rule);border:1px solid var(--rule)}
+  .three > div{background:var(--ink);padding:22px 20px;display:flex;
+    flex-direction:column;gap:9px}
+  .three h3{margin:0;font-family:var(--serif);font-weight:400;font-size:21px}
+  .three .k{font:500 10.5px/1 var(--mono);letter-spacing:.14em;
+    text-transform:uppercase;color:var(--brass)}
+  .three p{font-size:14px;color:var(--bone-2)}
+  .three .cost{font-size:13.5px;color:var(--bone-3);border-top:1px solid var(--rule);
+    padding-top:9px;margin-top:auto}
+
+  .ask{border-left:2px solid var(--brass);padding-left:20px;
+    display:flex;flex-direction:column;gap:12px}
+  .ask ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:9px;
+    font-size:15px;color:var(--bone-2)}
+  .ask b{color:var(--bone)}
+
+  footer{border-top:1px solid var(--rule);padding-block:30px;
+    font-size:13px;color:var(--bone-3);line-height:1.7}
+
+  @media (prefers-reduced-motion:reduce){
+    .treat{height:auto}
+    .stage{position:static;height:auto;min-height:78vh;padding-block:60px}
+    .entry,.plate{opacity:1!important;transform:none!important;position:relative!important;
+      inset:auto!important;margin-bottom:22px}
+    .logsheet{position:relative;display:flex;flex-direction:column}
+  }
+</style>
+
+<div class="doc">
+
+<div class="pad"><div class="col mast">
+  <div class="eyebrow">Taste calibration · one concept, three positions</div>
+  <h1>Descent</h1>
+  <p class="dim" style="font-size:18px">A homepage for a deep-water exploration
+  outfit. One continuous journey from surface light to trench floor — the
+  natural scroll-film subject, because the scroll axis <em>is</em> the
+  descent.</p>
+  <p class="dim">Same concept, same brief, three incompatible answers. Each is
+  defensible. None is the safe middle — averaging them would produce something
+  worse than any one of them.</p>
+  <div class="brief">
+    <div><dt>Client</dt><dd>Deep-water exploration</dd></div>
+    <div><dt>Job</dt><dd>Make depth felt before it is explained</dd></div>
+    <div><dt>Constraint</dt><dd>One unbroken shot, scroll-scrubbed</dd></div>
+    <div><dt>Scroll</dt><dd>Each panel below is live — scroll into it</dd></div>
+  </div>
+</div></div>
+
+<!-- ══════════════════ A ══════════════════ -->
+<section class="treat a" id="tA">
+  <div class="stage"><div class="stagewrap">
+    <canvas id="cA"></canvas>
+    <div style="position:absolute;inset:0;display:grid;place-items:center;padding:20px">
+      <div class="card">
+        <div class="let">Treatment A</div>
+        <h2>The Instrument</h2>
+        <p class="pos">Depth is a <em>number</em>, and the number is the drama.
+        No footage, no spectacle — a descent rendered as the readouts of a
+        machine going somewhere it was barely built to survive. Pressure climbs.
+        Temperature falls. The sonar finds nothing, then finds a floor.</p>
+        <p class="pos dim">The position: craft should be invisible. Withhold,
+        and let the data carry the feeling. Anything decorative is competing
+        with the only thing that matters.</p>
+        <div class="specs"><span>mono</span><span>cold</span><span>precise</span>
+        <span>no easing flourish</span><span>data as emotion</span></div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ══════════════════ B ══════════════════ -->
+<section class="treat b" id="tB">
+  <div class="stage"><div class="stagewrap">
+    <canvas id="cB"></canvas>
+    <div style="position:absolute;inset:0;display:grid;place-items:center;padding:20px">
+      <div class="card">
+        <div class="let">Treatment B</div>
+        <h2>The Dive</h2>
+        <p class="pos">The page <em>is</em> the ocean. Surface light warm and
+        broken overhead, attenuating through blue into black. Marine snow rising
+        past you as you fall. Shapes at the edge of resolution that may or may
+        not be there.</p>
+        <p class="pos dim">The position: make them feel it in the body before
+        they read a word. Spectacle is not decoration here — it is the argument.
+        Restraint would be a failure of nerve.</p>
+        <div class="specs"><span>serif at scale</span><span>parallax</span>
+        <span>attenuation</span><span>particulate</span><span>immersive</span></div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ══════════════════ C ══════════════════ -->
+<section class="treat c" id="tC">
+  <div class="stage"><div class="stagewrap">
+    <div class="logsheet" id="logC">
+      <div class="plate" data-at=".18" style="left:6%;top:16%;width:190px;height:130px;transform:rotate(-3deg)"></div>
+      <div class="entry" data-at=".08" style="left:8%;top:9%">
+        <div class="stamp">0641 h · −12 m</div>
+        <div class="txt">Surface chop worse than forecast. We went anyway.</div>
+      </div>
+      <div class="entry" data-at=".30" style="left:44%;top:34%">
+        <div class="stamp">0709 h · −340 m</div>
+        <div class="txt">Last of the blue. Below this everything we see, we brought.</div>
+        <div class="hand">— colour temp shifting faster than the log predicts</div>
+      </div>
+      <div class="plate" data-at=".46" style="right:9%;top:14%;width:160px;height:200px;transform:rotate(4deg)"></div>
+      <div class="entry" data-at=".54" style="left:10%;top:58%">
+        <div class="txt">Sonar returns nothing for eleven minutes. Then a floor,
+        where the chart says there is none.</div>
+        <div class="stamp" style="margin-top:8px">0803 h · −2,190 m</div>
+      </div>
+      <div class="entry" data-at=".76" style="left:50%;top:70%">
+        <div class="txt">We are the first. It is not a feeling I expected to
+        find boring, and it is not.</div>
+        <div class="hand">— hand-corrected, ink smudged</div>
+      </div>
+    </div>
+    <div style="position:absolute;inset:0;display:grid;place-items:center;padding:20px;pointer-events:none">
+      <div class="card" style="pointer-events:auto">
+        <div class="let">Treatment C</div>
+        <h2>The Log</h2>
+        <p class="pos">Not a dive — a <em>record</em> of one. The descent told
+        through the researcher's logbook: timestamps, depth marks, a human voice
+        getting quieter as the light goes. Photographs set into the page like
+        plates pasted into a field journal.</p>
+        <p class="pos dim">The position: story outlasts spectacle. Nobody
+        remembers a gradient. They remember that someone was down there, writing
+        it down, and that the handwriting changed.</p>
+        <div class="specs"><span>editorial</span><span>type-led</span>
+        <span>paper</span><span>reveal, not scrub</span><span>human voice</span></div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ══════════════════ decide ══════════════════ -->
+<div class="pad"><div class="col rail">
+  <div>
+    <div class="eyebrow">What you are actually choosing</div>
+    <h2 style="margin-top:14px">Three different beliefs about what makes work land</h2>
+  </div>
+
+  <div class="three">
+    <div>
+      <div class="k">A · Instrument</div>
+      <h3>Restraint</h3>
+      <p>Trusts the subject to be interesting without help. Ages well, reads as
+      confident, rewards attention.</p>
+      <p class="cost">Costs you: the visceral hit. Someone who bounces in two
+      seconds felt nothing.</p>
+    </div>
+    <div>
+      <div class="k">B · Dive</div>
+      <h3>Immersion</h3>
+      <p>Goes for the body first. Highest ceiling, most shareable, the thing
+      people describe to someone else afterwards.</p>
+      <p class="cost">Costs you: it can tip into technique announcing itself.
+      Expensive to execute; embarrassing done at 80%.</p>
+    </div>
+    <div>
+      <div class="k">C · Log</div>
+      <h3>Narrative</h3>
+      <p>Carried by voice and specificity. Cheapest to build, hardest to
+      dismiss, works with no footage at all.</p>
+      <p class="cost">Costs you: it is barely a scroll-film. You bought motion
+      and used prose.</p>
+    </div>
+  </div>
+
+  <div class="ask">
+    <p><b>Answer in whatever order you like — the rejections matter more than
+    the pick.</b></p>
+    <ol>
+      <li><b>Which one would you actually ship?</b></li>
+      <li><b>Why are the other two wrong?</b> Not "less good" — wrong. Be
+      specific and be harsh; a soft rejection carries no information.</li>
+      <li><b>What would you change about the one you picked?</b> The thing that
+      irritates you slightly is the highest-value sentence on this page.</li>
+    </ol>
+    <p class="dim" style="font-size:14px">A prediction of your answer was
+    committed to git before this page was built — commit <code style="font-family:var(--mono)">ae88ca6</code>.
+    It stays sealed until you respond, because a prediction shown first is a
+    prediction that shaped the answer.</p>
+  </div>
+
+  <footer>
+    Three treatments, one brief. Built from scratch — no template, no stock,
+    every mark generated. Motion here is pure code; the same directions run on
+    real footage without changing the argument.
+  </footer>
+</div></div>
+
+</div>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+  const lerp = (a,b,t) => a + (b-a)*t;
+
+  function prog(el){
+    const r = el.getBoundingClientRect();
+    const span = r.height - innerHeight;
+    if (span <= 0) return 0;
+    return clamp(-r.top / span, 0, 1);
+  }
+
+  function fit(cv){
+    const d = Math.min(devicePixelRatio || 1, 2);
+    const w = cv.clientWidth, h = cv.clientHeight;
+    if (cv.width !== w*d || cv.height !== h*d){
+      cv.width = w*d; cv.height = h*d;
+      cv.getContext('2d').setTransform(d,0,0,d,0,0);
+    }
+    return {w, h};
+  }
+
+  /* ─────────────── A · The Instrument ─────────────── */
+  const cA = document.getElementById('cA'), xA = cA.getContext('2d');
+  function drawA(p){
+    const {w,h} = fit(cA);
+    xA.clearRect(0,0,w,h);
+    const depth = Math.round(p * 3840);
+    const temp  = (18.4 - p*17.1).toFixed(1);
+    const bar   = (1 + p*384).toFixed(0);
+
+    // descending horizon rules — spacing tightens with depth
+    xA.strokeStyle = 'rgba(95,211,216,.16)'; xA.lineWidth = 1;
+    for (let i=0;i<26;i++){
+      const t = (i/26 + p*1.6) % 1;
+      const y = t*h;
+      xA.globalAlpha = 1 - Math.abs(t-.5)*1.4;
+      xA.beginPath(); xA.moveTo(w*.06,y); xA.lineTo(w*.94,y); xA.stroke();
+    }
+    xA.globalAlpha = 1;
+
+    // sonar sweep — finds a floor late
+    const cx0 = w*.5, cy0 = h*.5, R = Math.min(w,h)*.36;
+    const ang = p * Math.PI * 6;
+    const g = xA.createConicGradient ? null : null;
+    xA.save();
+    xA.strokeStyle = 'rgba(95,211,216,.5)';
+    xA.lineWidth = 1.5;
+    xA.beginPath(); xA.arc(cx0,cy0,R,ang-0.5,ang); xA.stroke();
+    xA.strokeStyle = 'rgba(95,211,216,.12)';
+    for (const r of [R*.4, R*.7, R]){
+      xA.beginPath(); xA.arc(cx0,cy0,r,0,6.283); xA.stroke();
+    }
+    if (p > .72){
+      const a = (p-.72)/.28;
+      xA.fillStyle = `rgba(95,211,216,${a*.85})`;
+      for (let i=0;i<40;i++){
+        const th = (i/40)*6.283;
+        const rr = R*(.82 + Math.sin(i*2.7)*.05);
+        xA.fillRect(cx0+Math.cos(th)*rr-1, cy0+Math.sin(th)*rr-1, 2.5, 2.5);
+      }
+    }
+    xA.restore();
+
+    // readouts
+    xA.fillStyle = '#5FD3D8';
+    xA.font = '600 clamp(28px,4vw,52px) ui-monospace,Menlo,monospace';
+    xA.textAlign = 'left';
+    const pad = Math.max(20, w*.055);
+    xA.fillText(`${depth.toLocaleString()} m`, pad, h - pad - 46);
+    xA.font = '500 11px ui-monospace,Menlo,monospace';
+    xA.fillStyle = 'rgba(232,228,220,.5)';
+    xA.fillText('DEPTH', pad, h - pad - 76);
+    xA.textAlign = 'right';
+    xA.fillStyle = 'rgba(232,228,220,.68)';
+    xA.font = '500 13px ui-monospace,Menlo,monospace';
+    xA.fillText(`${temp} °C`, w-pad, h - pad - 46);
+    xA.fillText(`${bar} bar`, w-pad, h - pad - 24);
+    xA.fillStyle = p > .72 ? '#5FD3D8' : 'rgba(232,228,220,.35)';
+    xA.fillText(p > .72 ? 'FLOOR ACQUIRED' : 'NO RETURN', w-pad, h - pad - 68);
+  }
+
+  /* ─────────────── B · The Dive ─────────────── */
+  const cB = document.getElementById('cB'), xB = cB.getContext('2d');
+  const snow = Array.from({length:190}, (_,i) => ({
+    x: Math.random(), y: Math.random(), r: .4 + Math.random()*1.9,
+    s: .15 + Math.random()*.7, w: Math.random()*6.283,
+  }));
+  function drawB(p){
+    const {w,h} = fit(cB);
+    // attenuation: warm surface → blue → black
+    const g = xB.createLinearGradient(0,0,0,h);
+    const k = p;
+    const top = [ lerp(232,10,k), lerp(201,26,k), lerp(155,48,k) ];
+    const mid = [ lerp(127,7,k),  lerp(178,20,k), lerp(201,40,k) ];
+    const bot = [ lerp(20,2,k),   lerp(48,5,k),   lerp(84,10,k)  ];
+    g.addColorStop(0, `rgb(${top.map(Math.round)})`);
+    g.addColorStop(.42, `rgb(${mid.map(Math.round)})`);
+    g.addColorStop(1, `rgb(${bot.map(Math.round)})`);
+    xB.fillStyle = g; xB.fillRect(0,0,w,h);
+
+    // broken surface light, receding
+    const lift = 1 - Math.min(1, p*1.9);
+    if (lift > .01){
+      xB.save(); xB.globalAlpha = lift*.5;
+      for (let i=0;i<9;i++){
+        const bx = (i/9)*w + Math.sin(p*7+i)*40;
+        const gg = xB.createLinearGradient(bx,0,bx+90,h*.75);
+        gg.addColorStop(0,'rgba(255,244,214,.55)');
+        gg.addColorStop(1,'rgba(255,244,214,0)');
+        xB.fillStyle = gg;
+        xB.beginPath();
+        xB.moveTo(bx,0); xB.lineTo(bx+58,0);
+        xB.lineTo(bx+150,h*.8); xB.lineTo(bx+34,h*.8);
+        xB.closePath(); xB.fill();
+      }
+      xB.restore();
+    }
+
+    // marine snow rising past
+    for (const f of snow){
+      const y = ((f.y - p*f.s*2.4) % 1 + 1) % 1;
+      const x = (f.x + Math.sin(y*9 + f.w)*.012) * w;
+      xB.globalAlpha = .10 + f.r*.22 * (1-p*.35);
+      xB.fillStyle = '#DCE9F2';
+      xB.beginPath(); xB.arc(x, y*h, f.r, 0, 6.283); xB.fill();
+    }
+    xB.globalAlpha = 1;
+
+    // a shape at the edge of resolution
+    if (p > .5){
+      const a = Math.sin(((p-.5)/.5)*Math.PI) * .3;
+      xB.globalAlpha = a;
+      xB.fillStyle = '#02060C';
+      xB.beginPath();
+      xB.ellipse(w*(.24 + p*.5), h*.62, w*.24, h*.075, -.12, 0, 6.283);
+      xB.fill();
+      xB.globalAlpha = 1;
+    }
+
+    // vignette
+    const v = xB.createRadialGradient(w/2,h/2,Math.min(w,h)*.28,w/2,h/2,Math.max(w,h)*.78);
+    v.addColorStop(0,'rgba(0,0,0,0)'); v.addColorStop(1,`rgba(0,0,0,${.34+p*.36})`);
+    xB.fillStyle = v; xB.fillRect(0,0,w,h);
+  }
+
+  /* ─────────────── C · The Log ─────────────── */
+  const logEls = [...document.querySelectorAll('#logC [data-at]')];
+  function drawC(p){
+    for (const el of logEls){
+      const at = parseFloat(el.dataset.at);
+      const t = clamp((p - at) / .1, 0, 1);
+      const settle = t*t*(3-2*t);
+      el.style.opacity = settle;
+      if (!el.classList.contains('plate')){
+        el.style.transform = `translateY(${(1-settle)*16}px)`;
+      }
+    }
+  }
+
+  /* ─────────────── driver ─────────────── */
+  const sA = document.getElementById('tA'),
+        sB = document.getElementById('tB'),
+        sC = document.getElementById('tC');
+
+  let queued = false;
+  function frame(){
+    queued = false;
+    const vis = (el) => { const r = el.getBoundingClientRect();
+      return r.top < innerHeight && r.bottom > 0; };
+    if (vis(sA)) drawA(prog(sA));
+    if (vis(sB)) drawB(prog(sB));
+    if (vis(sC)) drawC(prog(sC));
+  }
+  function tick(){ if (!queued){ queued = true; requestAnimationFrame(frame); } }
+
+  if (reduce){
+    drawA(.8); drawB(.6);
+    for (const el of logEls){ el.style.opacity = 1; el.style.transform = 'none'; }
+  } else {
+    addEventListener('scroll', tick, {passive:true});
+    addEventListener('resize', tick);
+    // continuous rAF only for B's drifting particulate, and only while visible
+    (function loop(){
+      const r = sB.getBoundingClientRect();
+      if (r.top < innerHeight && r.bottom > 0) drawB(prog(sB));
+      requestAnimationFrame(loop);
+    })();
+    tick();
+  }
+})();
+</script>
