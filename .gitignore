@@ -3,3 +3,4 @@ node_modules/
 
 # Generated from the graph — regenerate with: node scripts/dashboard.mjs
 interface/panel.html
+interface/console.html
