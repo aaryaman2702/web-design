@@ -8,6 +8,7 @@ requires: [reason.second_opinion]
 
 engines: [idea, opportunity, curiosity, reflection, evolution]
 depth: generative
+schedule: daily          # how often it RUNS — distinct from review cadence
 
 memory:
   reads:  [**]

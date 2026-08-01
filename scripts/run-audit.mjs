@@ -37,12 +37,18 @@ function frontmatter(text) {
   if (!m) return {};
   const out = {};
   let key = null;
+  // Strip trailing YAML comments. Without this, `schedule: daily  # note`
+  // yields the whole tail as the value and every lookup silently misses —
+  // which is exactly how this script failed to flag a missed run the first
+  // time it mattered.
+  const clean = (v) => v.replace(/\s+#.*$/, '').trim();
+
   for (const raw of m[1].split(/\r?\n/)) {
-    if (!raw.trim()) continue;
+    if (!raw.trim() || raw.trim().startsWith('#')) continue;
     const top = raw.match(/^([\w-]+):\s*(.*)$/);
-    if (top) { key = top[1]; out[key] = top[2].trim(); continue; }
+    if (top) { key = top[1]; out[key] = clean(top[2]); continue; }
     const sub = raw.match(/^\s+([\w-]+):\s*(.*)$/);
-    if (sub && key) { out[`${key}.${sub[1]}`] = sub[2].trim(); }
+    if (sub && key) { out[`${key}.${sub[1]}`] = clean(sub[2]); }
   }
   return out;
 }
@@ -73,14 +79,32 @@ function runsFor(name) {
   return out.sort((a, b) => a.date.localeCompare(b.date));
 }
 
-const CADENCE_DAYS = { daily: 1, weekly: 7, monthly: 31 };
+const CADENCE_DAYS = { hourly: 1, daily: 1, weekly: 7, monthly: 31 };
 
-const silent = [], unused = [], unverified = [], drifting = [];
+const silent = [], unused = [], unverified = [], drifting = [], unscheduled = [];
 
 for (const m of modules) {
   const runs = runsFor(m.name);
-  const cadence = m.fm['review.cadence'] ?? 'monthly';
-  const window = (CADENCE_DAYS[cadence] ?? 31) * 2;   // 2× cadence before alarm
+
+  // A module's RUN frequency and its REVIEW frequency are different things and
+  // conflating them is how a daily job goes silent for two months unnoticed.
+  //
+  // This was a real bug, caught the hard way: the dream runs daily, is reviewed
+  // monthly, and a missed run went unflagged because the window was computed
+  // from the review cadence — 62 days. The tool built to catch silent failures
+  // silently failed to catch one.
+  const schedule = m.fm['schedule'];
+  const cadence = schedule ?? m.fm['review.cadence'] ?? 'monthly';
+
+  // 1.5× cadence. For a daily job that means one missed run flags immediately,
+  // which is correct — a daily job that skipped yesterday is already broken.
+  // Longer cadences get proportionally more grace, since one miss on a weekly
+  // job is more plausibly legitimate.
+  const window = Math.max(1, (CADENCE_DAYS[cadence] ?? 31) * 1.5);
+
+  if (!schedule && runs.length) {
+    unscheduled.push({ module: m.name, assumed: cadence });
+  }
 
   if (!runs.length) {
     unused.push({
@@ -134,7 +158,7 @@ for (const m of modules) {
   }
 }
 
-const report = { generated: today, modules: modules.length, silent, unused, unverified, drifting };
+const report = { generated: today, modules: modules.length, silent, unused, unverified, drifting, unscheduled };
 
 if (JSON_OUT) { console.log(JSON.stringify(report, null, 2)); process.exit(0); }
 
@@ -158,6 +182,11 @@ for (const u of unverified) p(`  ${Y}?${X} ${u.module} — ${u.reason}`);
 p(`\n${B}Due assessment${X} ${D}(enough runs to grade against target)${X}`);
 if (!drifting.length) p(`  ${D}none${X}`);
 for (const d of drifting) p(`  ${Y}◷${X} ${d.module} — ${d.runs} runs · target: ${d.target}`);
+
+if (unscheduled.length) {
+  p(`\n${B}No declared schedule${X} ${D}(silence window guessed from review cadence)${X}`);
+  for (const u of unscheduled) p(`  ${Y}?${X} ${u.module} — assuming ${u.assumed}. Add "schedule:" to its frontmatter.`);
+}
 
 p(`\n${D}A module that never runs is not neutral — it is clutter every future${X}`);
 p(`${D}search steps over. Retiring one is as valuable as fixing one.${X}\n`);
