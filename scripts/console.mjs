@@ -183,6 +183,33 @@ const graphData = {
 
 /* ═══════════════════════════════════════════════ render */
 
+
+/* deterministic little network glyphs for the session rail — each distinct,
+   drawn from a seed so they never re-shuffle between builds */
+function glyph(i) {
+  let seed = i * 9301 + 49297;
+  const rnd = () => ((seed = (seed * 9301 + 49297) % 233280) / 233280);
+  const pts = Array.from({ length: 4 + Math.floor(rnd() * 3) },
+    () => [6 + rnd() * 20, 6 + rnd() * 18]);
+  const lines = [];
+  for (let a = 0; a < pts.length; a++) {
+    const b = (a + 1 + Math.floor(rnd() * 2)) % pts.length;
+    lines.push(`<line x1="${pts[a][0].toFixed(1)}" y1="${pts[a][1].toFixed(1)}" x2="${pts[b][0].toFixed(1)}" y2="${pts[b][1].toFixed(1)}"/>`);
+  }
+  return `<svg viewBox="0 0 32 30" fill="none" stroke="#3DD8F0" stroke-width=".9" stroke-linecap="round">
+    ${lines.join('')}${pts.map(([x, y], k) => `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${k ? 1.1 : 1.8}" fill="${k ? '#3DD8F0' : '#FF2D78'}" stroke="none"/>`).join('')}</svg>`;
+}
+
+/* inline sparkline — no library, no dependency */
+function spark(vals) {
+  const max = Math.max(1, ...vals), n = vals.length;
+  const pts = vals.map((v, i) => `${(i / (n - 1) * 100).toFixed(1)},${(26 - v / max * 22).toFixed(1)}`).join(' ');
+  const last = vals[n - 1] / max;
+  return `<svg class="spark" viewBox="0 0 100 26" preserveAspectRatio="none" fill="none">
+    <polyline points="${pts}" stroke="var(--cy)" stroke-width="1.4" vector-effect="non-scaling-stroke"/>
+    <circle cx="100" cy="${(26 - last * 22).toFixed(1)}" r="2" fill="var(--cy)"/></svg>`;
+}
+
 const NAV = [
   ['home','Home','◈'],
   ['commands','Commands','⌘'],
@@ -205,9 +232,9 @@ const out = [];
 out.push(`<title>JARVIS — operator</title>
 <style>
 :root{
-  --bg:#06080C; --panel:#0B0F16; --panel2:#10151F; --rule:#1A2231; --rule2:#232D3F;
-  --tx:#C5CFDD; --dim:#6E7C90; --dim2:#4A5568;
-  --cy:#45E0D8; --mg:#FF4D9D; --vi:#9D7BFF; --am:#E8A33D; --rd:#FF5F6D; --gr:#3DDC97;
+  --bg:#050A10; --panel:#0A1018; --panel2:#0E151F; --rule:#152232; --rule2:#1E3044;
+  --tx:#C8D8E6; --dim:#6B8399; --dim2:#44586C;
+  --cy:#3DD8F0; --mg:#FF2D78; --vi:#8B7BFF; --am:#E8A33D; --rd:#FF5F6D; --gr:#3DDC97;
   --mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;
   --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
 }
@@ -215,16 +242,17 @@ out.push(`<title>JARVIS — operator</title>
 body{margin:0}
 .os{display:grid;grid-template-columns:230px 1fr;min-height:100vh;background:var(--bg);
   color:var(--tx);font:400 15px/1.6 var(--sans);
-  background-image:radial-gradient(1100px 620px at 78% -8%,rgba(69,224,216,.055),transparent 62%),
-                   radial-gradient(780px 540px at 3% 106%,rgba(255,77,157,.045),transparent 60%)}
+  background-image:radial-gradient(1200px 660px at 74% -10%,rgba(61,216,240,.07),transparent 62%),
+                   radial-gradient(820px 560px at 2% 108%,rgba(255,45,120,.05),transparent 60%)}
 @media(max-width:900px){.os{grid-template-columns:1fr}.side{display:none}}
 
 .side{border-right:1px solid var(--rule);display:flex;flex-direction:column;
   background:linear-gradient(180deg,rgba(11,15,22,.95),rgba(6,8,12,.95));position:sticky;top:0;height:100vh}
 .brand{display:flex;gap:11px;align-items:center;padding:17px 15px;border-bottom:1px solid var(--rule)}
 .mark{width:29px;height:29px;border-radius:7px;display:grid;place-items:center;flex:none;
-  background:linear-gradient(140deg,var(--cy),#1C8F92);color:#04222A;font-weight:800;font-size:14px;
-  box-shadow:0 0 18px rgba(69,224,216,.42)}
+  background:radial-gradient(circle at 50% 50%,rgba(61,216,240,.22),transparent 70%);
+  border:1px solid rgba(61,216,240,.5);box-shadow:0 0 20px rgba(61,216,240,.3),inset 0 0 12px rgba(61,216,240,.14)}
+.mark svg{width:22px;height:22px}
 .brand b{font:600 14px/1.1 var(--sans);display:block}
 .brand span{font:500 9px/1 var(--mono);letter-spacing:.19em;color:var(--dim2);text-transform:uppercase}
 nav{padding:10px 9px;display:flex;flex-direction:column;gap:1px;overflow-y:auto;flex:1}
@@ -358,6 +386,20 @@ select.sel2{background:var(--panel2);border:1px solid var(--rule2);border-radius
 .btn.on{color:var(--cy);border-color:rgba(69,224,216,.5);background:rgba(69,224,216,.1)}
 .btn.mg{color:var(--mg);border-color:rgba(255,77,157,.4);background:rgba(255,77,157,.08)}
 
+#city{position:absolute;inset:0;width:100%;height:100%;display:block}
+.canvasarea{padding:0!important;min-height:400px}
+.heroin{position:relative;z-index:3;text-align:center;padding:20px}
+.bigname{font:600 clamp(30px,5.2vw,54px)/1 var(--mono);letter-spacing:.24em;
+  color:#9FF0FF;text-shadow:0 0 26px rgba(61,216,240,.85),0 0 62px rgba(61,216,240,.4);
+  -webkit-background-clip:initial;background:none}
+.sub{margin-top:13px;font:500 11.5px var(--mono);letter-spacing:.2em;color:rgba(200,232,246,.62);
+  text-transform:uppercase;text-shadow:0 0 14px rgba(61,216,240,.5)}
+.rail .th{width:36px;height:32px;border-radius:5px;border:1px solid var(--rule2);
+  background:rgba(10,18,26,.7);cursor:pointer;flex:none;display:grid;place-items:center;padding:3px}
+.rail .th:hover{border-color:var(--cy);box-shadow:0 0 12px rgba(61,216,240,.28)}
+.rail .th svg{width:100%;height:100%;opacity:.72}
+.spark{height:26px;width:100%;margin-top:5px}
+.radar{position:absolute;right:12px;bottom:10px;width:52px;height:52px;opacity:.5}
 #gc{display:block;width:100%;height:430px;touch-action:none;cursor:grab}
 .legend{display:flex;gap:14px;flex-wrap:wrap;padding:10px 15px;border-top:1px solid var(--rule);
   font:500 10px var(--mono);color:var(--dim2);letter-spacing:.06em}
@@ -386,7 +428,10 @@ pre{margin:0;padding:14px 16px;overflow-x:auto;font:400 12px/1.7 var(--mono);
 
 <div class="os">
 <aside class="side">
-  <div class="brand"><div class="mark">J</div><div><b>JARVIS</b><span>cognitive os</span></div></div>
+  <div class="brand"><div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#3DD8F0" stroke-width="1.2">
+    <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.4" fill="#3DD8F0"/>
+    <path d="M12 1v5M12 18v5M1 12h5M18 12h5"/></svg></div>
+    <div><b>JARVIS</b><span>cognitive os</span></div></div>
   <nav>
     ${NAV.map(([id,l,ic])=>`<button class="nl" data-v="${id}"><i>${ic}</i>${l}</button>`).join('')}
     <div class="ngrp">Reasoning</div>
@@ -428,18 +473,14 @@ Saying so on the panel beats a UI that pretends to be wired.</div>
 <div class="chat">
   <div class="rail">
     <button class="nb" title="new">+</button>
-    ${episodes.slice(0,11).map(()=>`<div class="th"></div>`).join('')}
+    ${episodes.slice(0,11).map((_,i)=>`<div class="th">${glyph(i)}</div>`).join('')}
   </div>
   <div class="stage">
     <div class="hd"><b>❯ NEW SESSION</b><span class="spacer"></span>
       <button class="btn">◨ speak</button><button class="btn">◉ voice</button></div>
     <div class="canvasarea">
-      <div class="glyph"><svg viewBox="0 0 400 300" fill="none" stroke="#45E0D8" stroke-width="1">
-        <circle cx="200" cy="150" r="118"/><circle cx="200" cy="150" r="86"/><circle cx="200" cy="150" r="52"/>
-        <path d="M200 32v236M82 150h236"/><path d="M118 68l164 164M282 68L118 232"/>
-        <rect x="176" y="126" width="48" height="48" transform="rotate(45 200 150)"/>
-      </svg></div>
-      <div><div class="bigname">JARVIS</div><div class="sub">❯ start a new conversation</div></div>
+      <canvas id="city"></canvas>
+      <div class="heroin"><div class="bigname">JARVIS</div><div class="sub">❯ start a new conversation</div></div>
     </div>
     <div class="composer">
       <div class="crow">
@@ -458,10 +499,18 @@ Saying so on the panel beats a UI that pretends to be wired.</div>
 </div>
 
 <div class="grid g4">
-  <div class="tile cy"><span class="k">Graph nodes</span><span class="v">${nodes.length}</span><span class="n">${edgeList.length} typed edges</span></div>
-  <div class="tile ${clusters===1?'gr':'am'}"><span class="k">Clusters</span><span class="v">${clusters}</span><span class="n">${clusters===1?'fully connected':'disconnected regions'}</span></div>
-  <div class="tile ${contra.length?'mg':''}"><span class="k">Contradictions</span><span class="v">${contra.length}</span><span class="n">sharpest signal in the graph</span></div>
-  <div class="tile ${orphans.length?'am':'gr'}"><span class="k">Orphans</span><span class="v">${orphans.length}</span><span class="n">${orphans.length?'cannot compound':'everything connects'}</span></div>
+  <div class="tile cy"><span class="k">Graph nodes</span><span class="v">${nodes.length}</span>
+    <span class="n">${edgeList.length} typed edges</span>${spark(week.map(w=>w.c))}</div>
+  <div class="tile ${clusters===1?'gr':'am'}"><span class="k">Clusters</span><span class="v">${clusters}</span>
+    <span class="n">${clusters===1?'fully connected':'disconnected regions'}</span></div>
+  <div class="tile ${contra.length?'mg':''}"><span class="k">Contradictions</span><span class="v">${contra.length}</span>
+    <span class="n">sharpest signal in the graph</span></div>
+  <div class="tile ${orphans.length?'am':'gr'}" style="position:relative"><span class="k">Last capture</span>
+    <span class="v" style="font-size:20px">${esc((activity[0]?.d ?? today).slice(0,10))}</span>
+    <span class="n">${orphans.length?orphans.length+' orphans':'everything connects'}</span>
+    <svg class="radar" viewBox="0 0 60 60" fill="none" stroke="var(--cy)" stroke-width=".8">
+      <circle cx="30" cy="30" r="26"/><circle cx="30" cy="30" r="17"/><circle cx="30" cy="30" r="8"/>
+      <path d="M30 4v52M4 30h52"/><path d="M30 30L48 16" stroke-width="1.4"/></svg></div>
 </div>
 
 ${dreams.length?`<div class="card"><h3>Last dream <span class="tag vi">${esc(dreams[0].date)}</span></h3>
@@ -820,6 +869,136 @@ out.push(`  </div></div></div>
       :'<div class="pad mut">No match.</div>';
   }
   eq.oninput=e=>renderEps(e.target.value); renderEps();
+
+
+  /* ── cinematic city hero ─────────────────────────────────────────────
+     Drawn rather than generated: costs nothing, animates, never pixelates.
+     Skyline and windows are seeded so they stay put; only rain, the HUD ring
+     and a few window flickers move. */
+  const cc = document.getElementById('city');
+  if (cc) {
+    const g = cc.getContext('2d');
+    let CW, CH, t = 0;
+    let seed = 20260801;
+    const rnd = () => ((seed = (seed * 9301 + 49297) % 233280) / 233280);
+
+    // three depth layers, far to near
+    const layers = [
+      { n: 26, h: [.30, .52], w: [26, 60], col: '#0C2030', lit: .30, hz: .72 },
+      { n: 18, h: [.42, .70], w: [34, 78], col: '#08161F', lit: .50, hz: .40 },
+      { n: 11, h: [.55, .88], w: [52, 108], col: '#030A10', lit: .22, hz: .12 },
+    ].map(L => {
+      let x = -60; const b = [];
+      while (x < 1700) {
+        const w = L.w[0] + rnd() * (L.w[1] - L.w[0]);
+        const h = L.h[0] + rnd() * (L.h[1] - L.h[0]);
+        const win = [];
+        for (let r = 0; r < 22; r++) for (let c = 0; c < 5; c++)
+          if (rnd() < L.lit) win.push([c, r, rnd()]);
+        b.push({ x, w, h, win, sign: rnd() < .22 ? rnd() : null });
+        x += w + 4 + rnd() * 16;
+      }
+      return { ...L, b };
+    });
+    const rain = Array.from({ length: 150 }, () => ({ x: rnd(), y: rnd(), l: .02 + rnd() * .05, s: .5 + rnd() * .9 }));
+
+    function sizeCity() {
+      const d = Math.min(devicePixelRatio || 1, 2);
+      CW = cc.clientWidth || 900; CH = cc.clientHeight || 420;
+      cc.width = CW * d; cc.height = CH * d; g.setTransform(d, 0, 0, d, 0, 0);
+    }
+
+    function city() {
+      g.clearRect(0, 0, CW, CH);
+      // sky
+      const sky = g.createLinearGradient(0, 0, 0, CH);
+      sky.addColorStop(0, '#04141F'); sky.addColorStop(.45, '#062231'); sky.addColorStop(1, '#020609');
+      g.fillStyle = sky; g.fillRect(0, 0, CW, CH);
+      // horizon bloom
+      const bl = g.createRadialGradient(CW * .5, CH * .74, 10, CW * .5, CH * .74, CW * .5);
+      bl.addColorStop(0, 'rgba(61,216,240,.16)'); bl.addColorStop(1, 'transparent');
+      g.fillStyle = bl; g.fillRect(0, 0, CW, CH);
+
+      const sc = CW / 1400;
+      for (const L of layers) {
+        g.globalAlpha = 1;
+        for (const b of L.b) {
+          const bx = b.x * sc, bw = b.w * sc, bh = b.h * CH, by = CH - bh;
+          g.fillStyle = L.col; g.fillRect(bx, by, bw, bh);
+          // windows
+          for (const [c, r, ph] of b.win) {
+            const wx = bx + 4 + c * (bw - 8) / 5, wy = by + 8 + r * 15 * sc;
+            if (wy > CH - 6) continue;
+            const fl = Math.sin(t * .0012 + ph * 40) > .93 ? .25 : 1;
+            g.fillStyle = ph > .82 ? 'rgba(255,45,120,' + (.5*fl) + ')' : 'rgba(61,216,240,' + ((.22+ph*.5)*fl) + ')';
+            g.fillRect(wx, wy, Math.max(1.5, (bw - 8) / 9), 3 * sc);
+          }
+          // vertical neon signage
+          if (b.sign !== null && bw > 22) {
+            const sx = bx + bw * .5, top = by + 14;
+            g.fillStyle = b.sign > .5 ? 'rgba(255,45,120,.72)' : 'rgba(61,216,240,.6)';
+            for (let k = 0; k < 4 + Math.floor(b.sign * 4); k++) {
+              const yy = top + k * 15 * sc;
+              if (yy > CH - 20) break;
+              g.fillRect(sx - 3, yy, 6, 9 * sc);
+            }
+          }
+        }
+        // atmospheric haze per layer
+        g.fillStyle = 'rgba(6,26,38,' + L.hz + ')';
+        g.fillRect(0, 0, CW, CH);
+      }
+
+      // figure silhouette
+      const fx = CW * .5, fy = CH * .995, fh = CH * .30;
+      g.fillStyle = '#01050A';
+      g.beginPath();
+      g.moveTo(fx - fh * .17, fy);
+      g.lineTo(fx - fh * .15, fy - fh * .62);
+      g.quadraticCurveTo(fx - fh * .17, fy - fh * .80, fx - fh * .07, fy - fh * .83);
+      g.arc(fx, fy - fh * .90, fh * .085, Math.PI, 0);
+      g.quadraticCurveTo(fx + fh * .17, fy - fh * .80, fx + fh * .15, fy - fh * .62);
+      g.lineTo(fx + fh * .17, fy);
+      g.closePath(); g.fill();
+      // rim light
+      g.strokeStyle = 'rgba(61,216,240,.30)'; g.lineWidth = 1.1; g.stroke();
+
+      // rain
+      g.strokeStyle = 'rgba(150,220,240,.16)'; g.lineWidth = .9;
+      for (const r of rain) {
+        const y = ((r.y + t * .00028 * r.s) % 1) * CH;
+        g.beginPath(); g.moveTo(r.x * CW, y); g.lineTo(r.x * CW - 3, y + r.l * CH); g.stroke();
+      }
+
+      // HUD ring
+      const rx = CW * .5, ry = CH * .46, R = Math.min(CW, CH) * .42;
+      g.save();
+      g.strokeStyle = 'rgba(61,216,240,.5)'; g.lineWidth = 1.6;
+      g.beginPath(); g.arc(rx, ry, R, 0, 6.283); g.stroke();
+      g.strokeStyle = 'rgba(61,216,240,.24)'; g.lineWidth = 1;
+      g.beginPath(); g.arc(rx, ry, R * .84, 0, 6.283); g.stroke();
+      g.strokeStyle = 'rgba(61,216,240,.85)'; g.lineWidth = 2.4;
+      const a = t * .00042;
+      g.beginPath(); g.arc(rx, ry, R, a, a + 1.15); g.stroke();
+      g.beginPath(); g.arc(rx, ry, R, a + Math.PI, a + Math.PI + .55); g.stroke();
+      g.strokeStyle = 'rgba(61,216,240,.4)';
+      g.beginPath(); g.arc(rx, ry, R * .84, -a * 1.7, -a * 1.7 + .8); g.stroke();
+      // node at top
+      g.fillStyle = 'rgba(61,216,240,.9)';
+      g.beginPath(); g.arc(rx, ry - R, 4.5, 0, 6.283); g.fill();
+      g.strokeStyle = 'rgba(61,216,240,.5)'; g.lineWidth = 1;
+      g.beginPath(); g.arc(rx, ry - R, 11, 0, 6.283); g.stroke();
+      g.restore();
+
+      // vignette
+      const vg = g.createRadialGradient(CW / 2, CH / 2, Math.min(CW, CH) * .22, CW / 2, CH / 2, Math.max(CW, CH) * .78);
+      vg.addColorStop(0, 'transparent'); vg.addColorStop(1, 'rgba(2,6,10,.82)');
+      g.fillStyle = vg; g.fillRect(0, 0, CW, CH);
+    }
+
+    sizeCity(); addEventListener('resize', sizeCity);
+    (function cloop() { t += 16; city(); requestAnimationFrame(cloop); })();
+  }
 
   /* ── graph ── */
   const D=${J(graphData)};
