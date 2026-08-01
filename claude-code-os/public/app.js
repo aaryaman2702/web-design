@@ -5,10 +5,10 @@
   let graphInstance = null;
   let profile = { name: '', hourlyRate: 50, focus: '' };
   const AGENTS = {
-    hermes: { key: 'hermes', chip: 'HERMES-AGENT', name: 'Hermes', title: 'HERMES-AGENT' },
+    jarvis: { key: 'jarvis', chip: 'JARVIS', name: 'J.A.R.V.I.S', title: 'J.A.R.V.I.S' },
     openclaw: { key: 'openclaw', chip: 'OPENCLAW', name: 'OpenClaw', title: 'OPENCLAW' },
   };
-  let agent = AGENTS.hermes;
+  let agent = AGENTS.jarvis;
 
   const $ = (sel, root = document) => root.querySelector(sel);
   const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -30,16 +30,43 @@
   const art = (id) => document.getElementById(id).innerHTML;
   const fetchJSON = (url) => fetch(url).then((r) => r.json());
 
-  /* Procedural "engraving" thumbnails for the session strip */
+  /* Procedural constellation glyphs for the session strip */
   function stripThumbSVG(seed) {
     let s = 0;
     for (const ch of seed) s = (s * 31 + ch.charCodeAt(0)) >>> 0;
     const rnd = () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
-    let paths = '';
-    for (let i = 0; i < 7; i++) {
-      paths += `<path d="M${rnd() * 44} ${rnd() * 34} Q${rnd() * 44} ${rnd() * 34} ${rnd() * 44} ${rnd() * 34}" stroke="#4a6350" stroke-width="1" fill="none" opacity="${0.4 + rnd() * 0.5}"/>`;
+    const n = 4 + Math.floor(rnd() * 3);
+    const pts = [];
+    for (let i = 0; i < n; i++) pts.push([4 + rnd() * 16, 4 + rnd() * 16]);
+    const cx = 12, cy = 12;
+    let links = '', dots = '';
+    for (const [x, y] of pts) {
+      links += `<path d="M${cx} ${cy}L${x.toFixed(1)} ${y.toFixed(1)}" stroke="#4d8dff" stroke-width=".8" opacity=".55"/>`;
+      dots += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.5" fill="#22d3ee" opacity=".9"/>`;
     }
-    return `<svg viewBox="0 0 44 34"><rect width="44" height="34" fill="#101a13"/>${paths}<rect x="3" y="3" width="38" height="28" fill="none" stroke="#2a3d30" stroke-width="1.4"/></svg>`;
+    return `<svg viewBox="0 0 24 24">${links}${dots}<circle cx="12" cy="12" r="2.6" fill="#ff2e88"/></svg>`;
+  }
+
+  /* Neon sparkline for the SESSIONS tile */
+  function sparkSVG(values) {
+    const max = Math.max(1, ...values), min = Math.min(...values);
+    const span = Math.max(1, max - min);
+    const pts = values.map((v, i) => [(i / Math.max(1, values.length - 1)) * 92 + 2, 30 - ((v - min) / span) * 24]);
+    const d = pts.map((p, i) => `${i ? 'L' : 'M'}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join('');
+    return `<svg class="stat-spark" viewBox="0 0 96 34" fill="none">
+      <path d="${d}" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"
+            style="filter:drop-shadow(0 0 6px var(--glow))"/>
+    </svg>`;
+  }
+
+  /* Radar pulse for the LAST ACTIVE tile */
+  function radarSVG() {
+    return `<svg class="stat-radar" viewBox="0 0 52 52" fill="none">
+      <circle cx="26" cy="26" r="24" stroke="var(--line-2)" stroke-width="1"/>
+      <circle cx="26" cy="26" r="16" stroke="color-mix(in srgb, var(--accent) 45%, transparent)" stroke-width="1" stroke-dasharray="3 4"/>
+      <circle cx="26" cy="26" r="9" stroke="color-mix(in srgb, var(--accent) 70%, transparent)" stroke-width="1"/>
+      <circle cx="26" cy="26" r="3.4" fill="var(--accent)" style="filter:drop-shadow(0 0 7px var(--glow))"/>
+    </svg>`;
   }
 
   /* ================================= HOME ================================= */
@@ -48,11 +75,11 @@
     const s = summary;
     const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
     const maxWeek = Math.max(1, ...s.week);
-    const memPath = s.demo ? '~/.HERMES/MEMORIES' : s.dataDir.toUpperCase();
+    const memPath = s.demo ? '~/.JARVIS/MEMORIES' : s.dataDir.toUpperCase();
 
     view.innerHTML = `
     <div class="page">
-      ${s.demo ? `<div class="demo-note">◈ DEMO DATA — no sessions found on disk yet. Everything goes live once ~/.claude has history.</div>` : ''}
+      ${s.demo ? `<div class="demo-note">◈ <b>DEMO DATA</b> — no sessions found on disk yet. Everything goes live once <code>${esc(s.dataDir)}</code> has history.</div>` : ''}
       <div class="row top-row">
         <div class="card">
           <div class="card-label">MEMORY</div>
@@ -65,7 +92,7 @@
           <div class="week-bars">
             ${s.week.map((v, i) => `
               <div class="week-day ${i === s.today ? 'today' : ''}">
-                <div class="bar" style="height:${Math.max(5, (v / maxWeek) * 100)}%"></div><span>${days[i]}</span>
+                <div class="bar" style="height:${(3 + (v / maxWeek) * 9).toFixed(1)}px"></div><span>${days[i]}</span>
               </div>`).join('')}
           </div>
         </div>
@@ -82,9 +109,9 @@
         <div class="chat-main">
           <div class="chat-art">${art('art-arch')}</div>
           <div class="chat-head">
-            <button class="nc js-new-chat" style="background:none;border:none;color:var(--text)">NEW CHAT</button>
-            <span style="display:flex;gap:8px">
-              <button class="voice-btn tts-btn" title="Speak replies aloud">🔊 SPEAK</button>
+            <button class="nc js-new-chat" style="background:none;border:none;color:#fff;letter-spacing:3px;font-size:11.5px;font-weight:600">NEW CHAT</button>
+            <span style="display:flex;gap:9px">
+              <button class="voice-btn tts-btn" title="Speak replies aloud">📶 SPEAK</button>
               <button class="voice-btn">🎙 VOICE</button>
             </span>
           </div>
@@ -119,8 +146,8 @@
                 <option value="high">high</option>
               </select>
             </div>
-            <div class="pill">❯_ Command</div>
-            <button class="pill toggle" id="council-pill" title="Route through the Ministry of Experts council">⚖ Ministry</button>
+            <div class="pill">❯_ COMMAND</div>
+            <button class="pill toggle" id="council-pill" title="Route through the Ministry of Experts council">⚖ MINISTRY</button>
             <div class="ctx-meter">
               <span class="ctx-cells">${'<i></i>'.repeat(14)}</span>
               <span class="ctx-pct">0%</span>
@@ -137,22 +164,22 @@
       <div class="row stats-row">
         <div class="stat-tile">
           <div class="card-label">SESSIONS</div>
-          <div class="stat-big">${s.stats.sessions}<span class="stat-dashes">----------</span></div>
+          <div class="stat-big">${s.stats.sessions}${sparkSVG(sessions.slice(0, 12).map((x) => x.messages).reverse())}</div>
           <div class="stat-foot">LAST ${s.stats.sessionsOnDisk} ON DISK</div>
         </div>
         <div class="stat-tile">
           <div class="card-label">MESSAGES</div>
-          <div class="stat-big">${s.stats.messages}<span class="ico">▭</span></div>
+          <div class="stat-big">${s.stats.messages}<span class="ico">🗨</span></div>
           <div class="stat-foot">ACROSS ALL SESSIONS</div>
         </div>
         <div class="stat-tile">
           <div class="card-label">MODELS</div>
-          <div class="stat-big">${s.stats.models}<span class="model-chips">${'<i>⁜</i>'.repeat(Math.min(3, Math.max(1, s.stats.models)))}</span></div>
+          <div class="stat-big">${s.stats.models}<span class="model-chips">${'<i>◈</i>'.repeat(Math.min(3, Math.max(1, s.stats.models)))}</span></div>
           <div class="stat-foot">DISTINCT MODELS USED</div>
         </div>
         <div class="stat-tile">
           <div class="card-label">LAST ACTIVE</div>
-          <div class="stat-big" style="font-size:30px">${timeAgo(s.stats.lastActiveTs)}<span class="last-dot"></span></div>
+          <div class="stat-big" style="font-size:27px">${timeAgo(s.stats.lastActiveTs)}${radarSVG()}</div>
           <div class="stat-foot">${esc((s.stats.lastModel || '').toUpperCase())}</div>
         </div>
       </div>
@@ -161,7 +188,7 @@
       <div class="card mc-card">
         <div class="mc-art">${art('art-athena')}</div>
         <div class="mc-body">
-          <h3>Every hero needs<br>a <em>great goal.</em></h3>
+          <h3>Every operator needs<br>a <em>great objective.</em></h3>
           <p>Give ${agent.name} a mission. Goals persist locally and steer what the agent optimizes for across sessions.</p>
           <div class="goal-row">
             <input class="goal-input" placeholder="e.g. Ship the agentic OS video by Friday">
@@ -241,10 +268,10 @@
 
   /* ========================== MEMORY / KNOWLEDGE ========================== */
   const modeIcon = {
-    macro: '<svg viewBox="0 0 26 18"><circle cx="13" cy="9" r="3" fill="#3fd67f"/><circle cx="4" cy="4" r="1.5" fill="#7d8c81"/><circle cx="22" cy="5" r="1.5" fill="#7d8c81"/><circle cx="6" cy="15" r="1.5" fill="#7d8c81"/><circle cx="21" cy="14" r="1.5" fill="#7d8c81"/><path d="M13 9L4 4M13 9l9-4M13 9l-7 6M13 9l8 5" stroke="#3a5545" stroke-width=".7"/></svg>',
-    mid: '<svg viewBox="0 0 26 18">' + [...Array(9)].map((_, i) => `<circle cx="${3 + (i % 3) * 10}" cy="${3 + Math.floor(i / 3) * 6}" r="1.3" fill="#7d8c81"/>`).join('') + '</svg>',
-    micro: '<svg viewBox="0 0 26 18">' + [...Array(15)].map((_, i) => `<circle cx="${2 + (i % 5) * 5.5}" cy="${3 + Math.floor(i / 5) * 6}" r="1" fill="#7d8c81"/>`).join('') + '</svg>',
-    full: '<svg viewBox="0 0 26 18">' + [...Array(24)].map((_, i) => `<circle cx="${2 + (i % 6) * 4.4}" cy="${2 + Math.floor(i / 6) * 4.6}" r=".8" fill="#7d8c81"/>`).join('') + '</svg>',
+    macro: '<svg viewBox="0 0 26 18"><path d="M13 9L4 4M13 9l9-4M13 9l-7 6M13 9l8 5" stroke="#4d8dff" stroke-width=".7"/><circle cx="13" cy="9" r="3" fill="#22d3ee"/><circle cx="4" cy="4" r="1.5" fill="#8493ba"/><circle cx="22" cy="5" r="1.5" fill="#8493ba"/><circle cx="6" cy="15" r="1.5" fill="#8493ba"/><circle cx="21" cy="14" r="1.5" fill="#8493ba"/></svg>',
+    mid: '<svg viewBox="0 0 26 18">' + [...Array(9)].map((_, i) => `<circle cx="${3 + (i % 3) * 10}" cy="${3 + Math.floor(i / 3) * 6}" r="1.3" fill="${i === 4 ? '#ff2e88' : '#8493ba'}"/>`).join('') + '</svg>',
+    micro: '<svg viewBox="0 0 26 18">' + [...Array(15)].map((_, i) => `<circle cx="${2 + (i % 5) * 5.5}" cy="${3 + Math.floor(i / 5) * 6}" r="1" fill="${i === 7 ? '#ff2e88' : '#8493ba'}"/>`).join('') + '</svg>',
+    full: '<svg viewBox="0 0 26 18">' + [...Array(24)].map((_, i) => `<circle cx="${2 + (i % 6) * 4.4}" cy="${2 + Math.floor(i / 6) * 4.6}" r=".8" fill="${i === 14 ? '#ff2e88' : '#8493ba'}"/>`).join('') + '</svg>',
   };
 
   async function renderGraphPage(defaultMode) {
@@ -254,12 +281,12 @@
       <div class="graph-wrap">
         <canvas id="graph-canvas"></canvas>
         <div class="graph-legend">
-          <span><b style="background:#31e0a6"></b>Memory Core</span>
-          <span><b style="background:#e8e6da"></b>Workspace</span>
-          <span><b style="background:#f0a51e"></b>File</span>
-          <span><b style="background:#a06df0"></b>Decision</span>
-          <span><b style="background:#5b8ff5"></b>Session</span>
-          <span><b style="background:#ef5da8"></b>Skill</span>
+          <span><b style="background:#22d3ee"></b>MEMORY CORE</span>
+          <span><b style="background:#e9edfa"></b>WORKSPACE</span>
+          <span><b style="background:#ffb020"></b>FILE</span>
+          <span><b style="background:#a855f7"></b>DECISION</span>
+          <span><b style="background:#4d8dff"></b>SESSION</span>
+          <span><b style="background:#ff2e88"></b>SKILL</span>
         </div>
         <div class="graph-tip" id="graph-tip"></div>
       </div>
@@ -303,7 +330,7 @@
       </div>
     </div>`;
 
-    const typeColor = { core: '#31e0a6', workspace: '#e8e6da', file: '#f0a51e', decision: '#a06df0', session: '#5b8ff5', skill: '#ef5da8' };
+    const typeColor = { core: '#22d3ee', workspace: '#e9edfa', file: '#ffb020', decision: '#a855f7', session: '#4d8dff', skill: '#ff2e88' };
     const drawPanel = (id, items) => {
       $(id).innerHTML = items.length
         ? items.map((it) => `<div class="gp-item"><b style="background:${typeColor[it.type] || '#7d8c81'}"></b><span class="lbl">${esc(it.label)}</span><span class="when">${timeAgo(it.ts)}</span></div>`).join('')
@@ -425,9 +452,17 @@
     view.innerHTML = `
     <div class="page" style="max-width:1200px">
       <div class="min-head">
-        <div class="min-art">✦</div>
+        <div class="min-art">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="6" r="3" stroke="#ff2e88" stroke-width="1.5"/>
+            <circle cx="5" cy="17" r="2.6" stroke="#4d8dff" stroke-width="1.4"/>
+            <circle cx="12" cy="18" r="2.6" stroke="#a855f7" stroke-width="1.4"/>
+            <circle cx="19" cy="17" r="2.6" stroke="#22d3ee" stroke-width="1.4"/>
+            <path d="M12 9v4M12 13H5.6M12 13h6.4M12 13v2.4" stroke="#5a6a95" stroke-width="1.1" stroke-dasharray="2 2"/>
+          </svg>
+        </div>
         <div>
-          <div class="min-kicker">✦ PANTHEON · THE ENSEMBLE</div>
+          <div class="min-kicker">◈ PANTHEON · THE ENSEMBLE</div>
           <h1 class="min-title">MINISTRY OF EXPERTS</h1>
         </div>
         <span class="sep" style="flex:1"></span>
@@ -476,16 +511,16 @@
               <b id="tok-val" style="font-family:var(--serif);font-size:16px">${preset.maxTokens.toLocaleString()}</b>
             </div>
             <input type="range" id="tok-slider" min="256" max="16384" step="256" value="${preset.maxTokens}" style="width:100%;accent-color:var(--gold)">
-            <div class="mem-path" style="margin-top:6px;color:var(--green)">Sweet spot — references stay short &amp; sharp, so the core gets clean signal (the HermesBench default).</div>
+            <div class="mem-path" style="margin-top:6px;color:var(--green)">Sweet spot — references stay short &amp; sharp, so the core gets clean signal (the ArenaBench default).</div>
             <div class="mem-path" style="margin-top:4px">CHANGE IT ANYTIME · SMALLER USUALLY = SHARPER MOA</div>
           </div>
 
           <button class="save-btn" id="min-save">↓ SAVE TO THIS COMPUTER</button>
-          <div class="mem-path" style="margin:8px 2px 0" id="save-note">writes the preset into Hermes' config — no copy-paste, backed up first</div>
+          <div class="mem-path" style="margin:8px 2px 0" id="save-note">writes the preset into the agent's config — no copy-paste, backed up first</div>
 
           <div class="card copy-card">
             <div class="bench-head" style="margin-bottom:10px">
-              <span class="card-label" style="margin:0">🜁 COPY FOR HERMES</span>
+              <span class="card-label" style="margin:0">◈ COPY FOR ${esc(agent.name.toUpperCase())}</span>
               <span style="flex:1"></span>
               <button class="gb-btn" id="min-copy">COPY</button>
             </div>
@@ -553,7 +588,7 @@
 
     function copyText() {
       return [
-        'Hey Hermes — set up a Mixture of Agents preset for me (your `moa` feature). Call it "ministry".',
+        `Hey ${agent.name} — set up a Mixture of Agents preset for me (your \`moa\` feature). Call it "ministry".`,
         '',
         "CORE MODEL — the aggregator. Reads every expert's proposal, writes the final answer, runs the tools:",
         `  • ${preset.core.name} — ${copyLine(modelByName(preset.core.name) || preset.core)}`,
@@ -729,7 +764,9 @@
         <div class="stat-tile"><div class="card-label">TODAY</div><div class="stat-big">$${spend.today.toFixed(2)}</div><div class="stat-foot">SINCE MIDNIGHT</div></div>
         <div class="stat-tile"><div class="card-label">LAST 7 DAYS</div><div class="stat-big">$${spend.week.toFixed(2)}</div><div class="stat-foot">ROLLING WEEK</div></div>
         <div class="stat-tile"><div class="card-label">ALL TIME</div><div class="stat-big">$${spend.total.toFixed(2)}</div><div class="stat-foot">${spend.calls} CALLS LOGGED</div></div>
-        <div class="stat-tile"><div class="card-label">TOKENS</div><div class="stat-big" style="font-size:26px">${fmtChars(spend.totalIn)} <span style="color:var(--dim);font-size:15px">in</span> ${fmtChars(spend.totalOut)} <span style="color:var(--dim);font-size:15px">out</span></div><div class="stat-foot">PROMPT · COMPLETION</div></div>
+        <div class="stat-tile"><div class="card-label">TOKENS</div>
+          <div class="stat-big" style="font-size:23px;gap:7px;flex-wrap:wrap">${fmtChars(spend.totalIn)}<span style="color:var(--dim);font-size:12px">IN</span><span style="color:var(--line-2)">/</span>${fmtChars(spend.totalOut)}<span style="color:var(--dim);font-size:12px">OUT</span></div>
+          <div class="stat-foot">PROMPT · COMPLETION</div></div>
       </div>
       <div class="card" style="margin-bottom:14px">
         <div class="card-label">DAILY SPEND · 14 DAYS</div>
@@ -995,27 +1032,37 @@
     settings: renderSettings,
   };
 
-  async function navigate() {
+  async function doNavigate() {
     const route = (location.hash.replace('#/', '') || 'home').split('?')[0];
     const render = routes[route] || renderHome;
     document.querySelectorAll('[data-route]').forEach((a) => a.classList.toggle('active', a.dataset.route === route));
     if (graphInstance) { graphInstance.destroy(); graphInstance = null; }
-    view.innerHTML = '<div class="page" style="color:var(--dim);padding:40px 0">Loading…</div>';
+    view.innerHTML = '<div class="page" style="color:var(--dim);padding:40px 0">LOADING…</div>';
     await render();
+  }
+
+  // Serialize navigations: two overlapping renders would wire listeners to a
+  // DOM the other one has already replaced.
+  let navChain = Promise.resolve();
+  function navigate() {
+    navChain = navChain.then(doNavigate, doNavigate);
+    return navChain;
   }
 
   function setAgent(key) {
     agent = AGENTS[key];
     document.documentElement.dataset.agent = key;
-    document.getElementById('agent-hermes').classList.toggle('active', key === 'hermes');
+    document.getElementById('agent-jarvis').classList.toggle('active', key === 'jarvis');
     document.getElementById('agent-openclaw').classList.toggle('active', key === 'openclaw');
     document.getElementById('topbar-agent').textContent = agent.chip;
-    document.getElementById('topbar-agent-name').textContent = agent.name;
-    navigate();
+    // Setting the hash fires hashchange → navigate(); only navigate directly
+    // when we're already on the target route.
+    if (location.hash === '#/ministry') navigate();
+    else location.hash = '#/ministry';
   }
   // Clicking an agent selects it and opens its Ministry of Experts config
-  document.getElementById('agent-hermes').addEventListener('click', () => { setAgent('hermes'); location.hash = '#/ministry'; });
-  document.getElementById('agent-openclaw').addEventListener('click', () => { setAgent('openclaw'); location.hash = '#/ministry'; });
+  document.getElementById('agent-jarvis').addEventListener('click', () => setAgent('jarvis'));
+  document.getElementById('agent-openclaw').addEventListener('click', () => setAgent('openclaw'));
 
   window.addEventListener('hashchange', navigate);
 
@@ -1033,7 +1080,7 @@
       <div class="ob-card">
         <div class="min-kicker">⁜ FIRST BOOT · OPERATOR SETUP</div>
         <h2 style="font-family:var(--serif);font-size:26px;margin:8px 0 4px">Welcome, operator.</h2>
-        <p style="color:var(--muted);font-size:12px;line-height:1.6;margin-bottom:18px">Three questions. ${'Hermes'} uses these to personalize the OS and estimate the value of time it saves you.</p>
+        <p style="color:var(--muted);font-size:12px;line-height:1.6;margin-bottom:18px">Three questions. ${agent.name} uses these to personalize the OS and estimate the value of time it saves you.</p>
         <label class="ob-label">YOUR NAME</label>
         <input class="goal-input ob-in" id="ob-name" placeholder="e.g. Aaryaman">
         <label class="ob-label">YOUR HOURLY RATE (USD) — FOR ROI TRACKING</label>
@@ -1107,8 +1154,8 @@
           return;
         }
       }
-      // Fall through: ask Hermes in the home chat
-      say('Asking Hermes.');
+      // Fall through: ask the agent in the home chat
+      say('Asking Jarvis.');
       sessionStorage.setItem('pendingAsk', text);
       if (location.hash === '#/home' || location.hash === '') navigate();
       else location.hash = '#/home';

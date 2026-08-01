@@ -1,11 +1,13 @@
 /*
- * Claude Code OS — local operator server.
+ * J.A.R.V.I.S Operating System — local operator server.
  *   npm install && npm start   →   http://localhost:8083
  *
  * Env:
- *   ANTHROPIC_API_KEY  enables real chat (otherwise chat runs in simulated mode)
- *   CLAUDE_HOME        override the data dir (default ~/.claude)
- *   PORT               override port (default 8083)
+ *   ANTHROPIC_API_KEY   enables real chat (otherwise chat runs in simulated mode)
+ *   OPENROUTER_API_KEY  routes GPT / GLM / DeepSeek seats through OpenRouter
+ *   OBSIDIAN_VAULT      markdown vault indexed into the Documents page
+ *   CLAUDE_HOME         override the data dir (default ~/.claude)
+ *   PORT                override port (default 8083)
  */
 const express = require('express');
 const fs = require('fs');
@@ -299,11 +301,11 @@ async function runAutomation(auto) {
   if (API_KEY) {
     model = 'claude-fable-5';
     result = await callAnthropic(model,
-      'You are Hermes running a scheduled automation for the operator. Do the task and report the outcome concisely in plain text.',
+      'You are J.A.R.V.I.S running a scheduled automation for the operator. Do the task and report the outcome concisely in plain text.',
       auto.prompt, 2048);
   } else if (OR_KEY) {
     model = 'openai/gpt-5.5';
-    result = await callOpenRouter(model, 'You are Hermes running a scheduled automation for the operator. Do the task and report the outcome concisely.', auto.prompt, 2048);
+    result = await callOpenRouter(model, 'You are J.A.R.V.I.S running a scheduled automation for the operator. Do the task and report the outcome concisely.', auto.prompt, 2048);
   } else {
     model = 'simulated';
     result = `[simulated] Automation "${auto.name}" would run now:\n${auto.prompt}\n\nSet ANTHROPIC_API_KEY or OPENROUTER_API_KEY to execute for real.`;
@@ -379,7 +381,7 @@ async function runDream(trigger) {
   if (API_KEY) {
     model = 'claude-fable-5';
     body = await callAnthropic(model,
-      'You are Hermes, the operator\'s agent, running your nightly "dream" — an overnight review while the operator sleeps. Write a concise report in plain text with exactly these sections: WHAT I NOTICED, OPPORTUNITIES, TOMORROW\'S PLAN. Be specific and actionable, no fluff.',
+      'You are J.A.R.V.I.S, the operator\'s agent, running your nightly "dream" — an overnight review while the operator sleeps. Write a concise report in plain text with exactly these sections: WHAT I NOTICED, OPPORTUNITIES, TOMORROW\'S PLAN. Be specific and actionable, no fluff.',
       `Operator stats: ${summary.stats.sessions} sessions, ${summary.stats.messages} messages, last active ${new Date(summary.stats.lastActiveTs).toISOString()}.\n\nOpen goals:\n${openGoals}\n\nRecent activity:\n${recentWork}`,
       2048);
   } else {
@@ -427,7 +429,7 @@ setInterval(() => {
 const EFFORT_TOKENS = { low: 1024, medium: 4096, high: 16384 };
 
 const SYSTEM_PROMPT = [
-  'You are Hermes, the operator\'s personal agent inside Claude Code OS — a local',
+  'You are J.A.R.V.I.S, the operator\'s personal agent inside the J.A.R.V.I.S Operating System — a local',
   'dashboard styled like a retro Greek terminal. Be direct, capable, and brief.',
   'You help the operator run their missions: research, content, finance, memory.',
 ].join(' ');
@@ -443,7 +445,7 @@ app.post('/api/chat', async (req, res) => {
   const canServe = isOpenRouter ? Boolean(OR_KEY) : Boolean(API_KEY);
 
   if (!canServe) {
-    // Simulated mode — stream a canned Hermes response word by word.
+    // Simulated mode — stream a canned J.A.R.V.I.S response word by word.
     const last = messages.length ? String(messages[messages.length - 1].content || '') : '';
     const needed = isOpenRouter ? 'OPENROUTER_API_KEY' : 'ANTHROPIC_API_KEY';
     const reply = [
@@ -570,7 +572,7 @@ app.get(/.*/, (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.h
 
 app.listen(PORT, () => {
   const mode = API_KEY ? 'LIVE (ANTHROPIC_API_KEY set)' : 'SIMULATED (no ANTHROPIC_API_KEY)';
-  console.log(`\n  ⁜ Claude Code OS · Operator`);
+  console.log(`\n  ◈ J.A.R.V.I.S · OPERATING SYSTEM`);
   console.log(`  ▸ http://localhost:${PORT}`);
   console.log(`  ▸ data dir: ${data.DATA_DIR}`);
   console.log(`  ▸ chat: ${mode}`);

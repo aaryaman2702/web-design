@@ -3,67 +3,93 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Claude Code OS — Operator</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23e8703a'/%3E%3Ctext x='16' y='22' font-size='16' text-anchor='middle' fill='%23fff'%3E%E2%81%9C%3C/text%3E%3C/svg%3E">
+<title>J.A.R.V.I.S — Operating System</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23090d1a' stroke='%23ff2e88' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23ff2e88'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 <div id="os">
 
-  <!-- ============================= SIDEBAR ============================= -->
+  <!-- ============================== SIDEBAR ============================== -->
   <aside id="sidebar">
     <div class="brand">
-      <div class="brand-mark">⁜</div>
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+        <defs>
+          <radialGradient id="coreG" cx=".5" cy=".5" r=".5">
+            <stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#ff2e88"/><stop offset="1" stop-color="#7a1040"/>
+          </radialGradient>
+        </defs>
+        <circle cx="24" cy="24" r="22" fill="#070b16" stroke="#243154" stroke-width="1.5"/>
+        <circle cx="24" cy="24" r="18" fill="none" stroke="#ff2e88" stroke-width="1.4" stroke-dasharray="26 8" opacity=".85"/>
+        <circle cx="24" cy="24" r="13.5" fill="none" stroke="#4d8dff" stroke-width="1.2" stroke-dasharray="4 5" opacity=".8"/>
+        <g stroke="#ff6ab4" stroke-width="1.6" opacity=".9">
+          <path d="M24 10.5V16M24 32v5.5M10.5 24H16M32 24h5.5"/>
+        </g>
+        <circle cx="24" cy="24" r="7" fill="url(#coreG)"/>
+        <circle cx="24" cy="24" r="3" fill="#fff" opacity=".95"/>
+      </svg>
       <div class="brand-text">
-        <div class="brand-name">Claude Code OS</div>
-        <div class="brand-sub">OPERATOR</div>
+        <div class="brand-name">J.A.R.V.I.S</div>
+        <div class="brand-sub">OPERATING SYSTEM</div>
       </div>
     </div>
 
     <nav id="nav">
-      <a href="#/home" data-route="home"><span class="nav-ico">⌂</span>Home</a>
-      <a href="#/skills" data-route="skills"><span class="nav-ico">✦</span>Skills</a>
-      <a href="#/memory" data-route="memory"><span class="nav-ico">◍</span>Memory</a>
-      <a href="#/graph" data-route="graph"><span class="nav-ico">⌁</span>Knowledge Graph</a>
-      <a href="#/activity" data-route="activity"><span class="nav-ico">∿</span>Activity</a>
-      <a href="#/dreams" data-route="dreams"><span class="nav-ico">☾</span>Dreams</a>
-      <a href="#/documents" data-route="documents"><span class="nav-ico">🗎</span>Documents</a>
-      <a href="#/chatlogs" data-route="chatlogs"><span class="nav-ico">🗨</span>Chat Logs</a>
-      <a href="#/automations" data-route="automations"><span class="nav-ico">⟳</span>Automations</a>
-      <a href="#/spend" data-route="spend"><span class="nav-ico">$</span>AI Spend</a>
-      <a href="#/integrations" data-route="integrations"><span class="nav-ico">⌘</span>Integrations</a>
+      <a href="#/home" data-route="home"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></span>HOME</a>
+      <a href="#/skills" data-route="skills"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="10" y="10" width="4" height="4"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke-linecap="round"/></svg></span>SKILLS</a>
+      <a href="#/memory" data-route="memory"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span>MEMORY</a>
+      <a href="#/graph" data-route="graph"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="2.6"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="18" r="2"/><path d="m10.2 10.2-3.4-3.4M13.7 10.6 17.4 7.5M10.3 13.6 7.4 17.5M13.8 13.7l2.7 3"/></svg></span>KNOWLEDGE GRAPH</a>
+      <a href="#/activity" data-route="activity"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 13h4l3-8 4 16 3-8h6"/></svg></span>ACTIVITY</a>
+      <a href="#/dreams" data-route="dreams"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/><path d="M16 4.5h3M17.5 3v3" stroke-linecap="round"/></svg></span>DREAMS</a>
+      <a href="#/documents" data-route="documents"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h8l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v4h4M8 12h8M8 16h5"/></svg></span>DOCUMENTS</a>
+      <a href="#/chatlogs" data-route="chatlogs"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z"/></svg></span>CHAT LOGS</a>
+      <a href="#/automations" data-route="automations"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v4h-4"/><circle cx="12" cy="12" r="2.4"/></svg></span>AUTOMATIONS</a>
+      <a href="#/spend" data-route="spend"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9.2c-.6-1-1.8-1.6-3-1.6-1.7 0-3 .9-3 2.2 0 3 6 1.4 6 4.4 0 1.3-1.3 2.2-3 2.2-1.3 0-2.5-.6-3-1.6M12 6v12"/></svg></span>AI SPEND</a>
+      <a href="#/integrations" data-route="integrations"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>INTEGRATIONS</a>
     </nav>
 
     <div class="side-section">AGENTS</div>
     <div class="agents">
-      <button class="agent-btn agent-hermes active" id="agent-hermes">HERMES-AGENT</button>
-      <button class="agent-btn agent-openclaw" id="agent-openclaw"><span class="claw">🦞</span>OPEN<em>CLAW</em></button>
+      <button class="agent-btn agent-jarvis active" id="agent-jarvis">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="10.5" fill="#0b0f1e" stroke="currentColor" stroke-width="1.2" opacity=".8"/>
+          <circle cx="12" cy="12" r="7.6" fill="none" stroke="#ff2e88" stroke-width="1.3" stroke-dasharray="11 5"/>
+          <circle cx="12" cy="12" r="4.2" fill="none" stroke="#ff6ab4" stroke-width="1"/>
+          <circle cx="12" cy="12" r="2" fill="#ff2e88"/>
+        </svg>JARVIS</button>
+      <button class="agent-btn agent-openclaw" id="agent-openclaw">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="10.5" fill="#0b0f1e" stroke="currentColor" stroke-width="1.2" opacity=".8"/>
+          <circle cx="12" cy="12" r="7" fill="none" stroke="#22d3ee" stroke-width="1.3" stroke-dasharray="4 4"/>
+          <path d="M12 7.5v9M7.5 12h9" stroke="#22d3ee" stroke-width="1.2"/>
+          <circle cx="12" cy="12" r="2.2" fill="#22d3ee"/>
+        </svg>OPENCLAW</button>
     </div>
 
     <div class="side-spacer"></div>
 
     <nav class="nav-bottom">
-      <a href="#/settings" data-route="settings"><span class="nav-ico">⚙</span>Settings</a>
+      <a href="#/settings" data-route="settings"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 9 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span>SETTINGS</a>
     </nav>
     <div class="operator-chip">
       <div class="op-avatar">OP</div>
       <div>
-        <div class="op-name">Operator</div>
+        <div class="op-name">OPERATOR</div>
         <div class="op-sub">LOCAL</div>
       </div>
     </div>
   </aside>
 
-  <!-- ============================== MAIN =============================== -->
+  <!-- =============================== MAIN ================================ -->
   <div id="main">
     <header id="topbar">
       <div class="crumb">
-        <strong>Operator</strong><span class="crumb-sep">/</span><span>local</span>
-        <span class="version-chip" id="version-chip">V2.10.1 · 3dbd8e1</span>
+        <strong>OPERATOR</strong><span class="crumb-sep">/</span><span>LOCAL</span>
+        <span class="version-chip" id="version-chip">v2.10.1 · 3bd8e1</span>
       </div>
       <div class="topbar-right">
-        <span class="agent-chip" id="topbar-agent">HERMES-AGENT</span>
-        <span class="agent-status"><span class="dot dot-green"></span><strong id="topbar-agent-name">Hermes</strong>&nbsp;<span class="spaced" id="topbar-agent-status">ONLINE</span></span>
+        <span class="agent-chip" id="topbar-agent">JARVIS</span>
+        <span class="agent-status"><span class="dot dot-green"></span><span class="spaced" id="topbar-agent-status">ONLINE</span></span>
         <button class="icon-btn" title="Notifications">🔔</button>
       </div>
     </header>
@@ -71,117 +97,209 @@
   </div>
 </div>
 
-<!-- ======================= INLINE ART (SVG defs) ======================= -->
+<!-- ========================= INLINE ART (templates) ========================= -->
 <template id="art-arch">
-  <svg viewBox="0 0 900 560" preserveAspectRatio="xMidYMax slice" class="arch-svg" aria-hidden="true">
+  <svg viewBox="0 0 900 560" preserveAspectRatio="xMidYMid slice" class="arch-svg" aria-hidden="true">
     <defs>
-      <linearGradient id="archGlow" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#1c2b22"/><stop offset=".55" stop-color="#12201a"/><stop offset="1" stop-color="#0a120e"/>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#150d2e"/><stop offset=".38" stop-color="#3a1547"/>
+        <stop offset=".62" stop-color="#8a2a63"/><stop offset=".78" stop-color="#e0568f"/>
+        <stop offset=".88" stop-color="#ffa8c8"/><stop offset="1" stop-color="#ffd9c4"/>
       </linearGradient>
-      <radialGradient id="haze" cx=".5" cy=".42" r=".55">
-        <stop offset="0" stop-color="#3a5c42" stop-opacity=".55"/><stop offset="1" stop-color="#0a120e" stop-opacity="0"/>
+      <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffb6cf" stop-opacity=".55"/>
+        <stop offset=".35" stop-color="#7a3d86" stop-opacity=".5"/>
+        <stop offset="1" stop-color="#0a0f22"/>
+      </linearGradient>
+      <linearGradient id="towerFar" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3d2a63"/><stop offset="1" stop-color="#1a1236"/>
+      </linearGradient>
+      <linearGradient id="towerNear" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#241a44"/><stop offset="1" stop-color="#0c0a1e"/>
+      </linearGradient>
+      <radialGradient id="sunG" cx=".5" cy=".5" r=".5">
+        <stop offset="0" stop-color="#fff3d6"/><stop offset=".5" stop-color="#ffb0a0" stop-opacity=".75"/>
+        <stop offset="1" stop-color="#ff7ab0" stop-opacity="0"/>
       </radialGradient>
-      <pattern id="meander" width="28" height="28" patternUnits="userSpaceOnUse">
-        <path d="M2 26V2h24v16h-16v-8h8" fill="none" stroke="#3d5a45" stroke-width="2.4"/>
-      </pattern>
-      <pattern id="coffer" width="46" height="46" patternUnits="userSpaceOnUse">
-        <rect x="4" y="4" width="38" height="38" fill="none" stroke="#24382c" stroke-width="3"/>
-        <rect x="13" y="13" width="20" height="20" fill="none" stroke="#1b2c22" stroke-width="3"/>
-      </pattern>
+      <clipPath id="archClip">
+        <path d="M196 560 V318 A254 254 0 0 1 704 318 V560 Z"/>
+      </clipPath>
+      <filter id="neonBlur" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="3"/>
+      </filter>
     </defs>
-    <rect width="900" height="560" fill="url(#archGlow)"/>
-    <!-- meander side bands -->
-    <rect x="26" y="0" width="30" height="560" fill="url(#meander)" opacity=".5"/>
-    <rect x="844" y="0" width="30" height="560" fill="url(#meander)" opacity=".5"/>
-    <!-- outer arch -->
-    <path d="M120 560 V300 A330 330 0 0 1 780 300 V560" fill="none" stroke="#2c4434" stroke-width="26"/>
-    <path d="M120 560 V300 A330 330 0 0 1 780 300 V560" fill="none" stroke="#405c48" stroke-width="3"/>
-    <!-- coffered inner arch -->
-    <path d="M180 560 V310 A270 270 0 0 1 720 310 V560" fill="url(#coffer)" opacity=".8"/>
-    <path d="M180 560 V310 A270 270 0 0 1 720 310 V560" fill="none" stroke="#324c3a" stroke-width="8"/>
-    <!-- interior depth -->
-    <path d="M250 560 V340 A200 200 0 0 1 650 340 V560" fill="#0d1712"/>
-    <path d="M250 560 V340 A200 200 0 0 1 650 340 V560" fill="url(#haze)"/>
-    <path d="M320 560 V380 A130 130 0 0 1 580 380 V560" fill="#091009"/>
-    <!-- floor -->
-    <g stroke="#233829" stroke-width="2" opacity=".7">
-      <line x1="130" y1="560" x2="330" y2="470"/><line x1="770" y1="560" x2="570" y2="470"/>
-      <line x1="250" y1="560" x2="380" y2="480"/><line x1="650" y1="560" x2="520" y2="480"/>
-      <line x1="300" y1="520" x2="600" y2="520"/><line x1="330" y1="488" x2="570" y2="488"/>
-    </g>
-    <!-- keystone medallions -->
-    <circle cx="450" cy="120" r="26" fill="none" stroke="#3d5a45" stroke-width="3"/>
-    <circle cx="450" cy="120" r="14" fill="none" stroke="#324c3a" stroke-width="2"/>
-    <circle cx="300" cy="160" r="16" fill="none" stroke="#324c3a" stroke-width="2.5" opacity=".7"/>
-    <circle cx="600" cy="160" r="16" fill="none" stroke="#324c3a" stroke-width="2.5" opacity=".7"/>
-    <!-- Hermes figure: runner silhouette with whip-line -->
-    <g class="hermes-fig" transform="translate(430 330)">
-      <radialGradient id="figGlow" cx=".5" cy=".3" r=".8">
-        <stop offset="0" stop-color="#7d9b82" stop-opacity=".35"/><stop offset="1" stop-color="#000" stop-opacity="0"/>
-      </radialGradient>
-      <ellipse cx="10" cy="110" rx="120" ry="130" fill="url(#figGlow)"/>
-      <g fill="#131f17" stroke="#5d7f66" stroke-width="2" stroke-linejoin="round">
-        <circle cx="4" cy="-4" r="15"/>
-        <!-- torso + striding legs as one silhouette -->
-        <path d="M-6 12
-                 C-18 28 -22 58 -13 86
-                 L-30 148 L-54 202 L-40 209 L-8 152 L2 116
-                 L20 156 L13 210 L29 212 L38 150 L23 86
-                 C31 56 25 26 12 12 Z"/>
-        <!-- rear arm reaching back -->
-        <path d="M-8 28 L-50 62 L-44 72 L-4 46 Z"/>
-        <!-- forward arm holding the whip -->
-        <path d="M14 30 L64 48 L60 59 L10 48 Z"/>
+
+    <rect width="900" height="560" fill="#05070f"/>
+
+    <!-- ============ city inside the arch ============ -->
+    <g clip-path="url(#archClip)">
+      <rect x="196" y="40" width="508" height="520" fill="url(#sky)"/>
+      <!-- clouds -->
+      <g fill="#ffb4d2" opacity=".16">
+        <ellipse cx="320" cy="180" rx="110" ry="20"/><ellipse cx="560" cy="152" rx="130" ry="17"/>
+        <ellipse cx="640" cy="216" rx="86" ry="13"/><ellipse cx="380" cy="238" rx="76" ry="11"/>
       </g>
-      <!-- whip line -->
-      <path d="M64 52 C140 44 180 100 236 88 C278 78 298 116 340 112" fill="none" stroke="#6e8f76" stroke-width="2.4" stroke-linecap="round" opacity=".85"/>
-      <!-- winged sandals + helmet wing -->
-      <path d="M-54 200 l-16 -7 9 14 z M15 208 l-15 -5 7 11 z M-9 -12 l-14 -8 5 12 z" fill="#5d7f66"/>
+      <!-- sun -->
+      <circle cx="450" cy="370" r="78" fill="url(#sunG)"/>
+      <circle cx="450" cy="370" r="30" fill="#fff8ec"/>
+
+      <!-- far skyline -->
+      <g fill="url(#towerFar)" opacity=".8">
+        <rect x="200" y="304" width="17" height="100"/><rect x="222" y="324" width="13" height="80"/>
+        <rect x="240" y="292" width="20" height="112"/><rect x="264" y="332" width="12" height="72"/>
+        <rect x="281" y="310" width="16" height="94"/><rect x="302" y="336" width="11" height="68"/>
+        <rect x="318" y="318" width="14" height="86"/><rect x="337" y="342" width="10" height="62"/>
+        <rect x="553" y="338" width="12" height="66"/><rect x="570" y="304" width="18" height="100"/>
+        <rect x="593" y="328" width="12" height="76"/><rect x="610" y="290" width="21" height="114"/>
+        <rect x="636" y="320" width="14" height="84"/><rect x="655" y="336" width="12" height="68"/>
+        <rect x="672" y="308" width="16" height="96"/><rect x="693" y="334" width="11" height="70"/>
+      </g>
+      <!-- near towers -->
+      <g fill="url(#towerNear)">
+        <rect x="196" y="270" width="29" height="136"/><rect x="229" y="240" width="24" height="166"/>
+        <rect x="257" y="282" width="20" height="124"/><rect x="281" y="256" width="26" height="150"/>
+        <rect x="311" y="288" width="18" height="118"/><rect x="333" y="268" width="22" height="138"/>
+        <rect x="545" y="262" width="25" height="144"/><rect x="574" y="236" width="22" height="170"/>
+        <rect x="600" y="278" width="28" height="128"/><rect x="632" y="252" width="24" height="154"/>
+        <rect x="660" y="284" width="19" height="122"/><rect x="683" y="264" width="23" height="142"/>
+      </g>
+      <!-- antennae -->
+      <g stroke="#ff2e88" stroke-width="1.2" opacity=".9">
+        <path d="M241 288v-22M585 284v-24M292 304v-16M644 300v-18"/>
+      </g>
+      <g fill="#ff5ba3">
+        <circle cx="241" cy="216" r="2.2"/><circle cx="585" cy="210" r="2.2"/>
+        <circle cx="292" cy="238" r="1.8"/><circle cx="644" cy="233" r="1.8"/>
+      </g>
+      <!-- lit windows -->
+      <g fill="#ffdcae" opacity=".9">
+        <rect x="201" y="282" width="3.4" height="4.6"/><rect x="210" y="282" width="3.4" height="4.6"/><rect x="217" y="296" width="3.4" height="4.6"/>
+        <rect x="201" y="304" width="3.4" height="4.6"/><rect x="214" y="320" width="3.4" height="4.6"/><rect x="205" y="344" width="3.4" height="4.6"/>
+        <rect x="234" y="252" width="3.4" height="4.6"/><rect x="244" y="264" width="3.4" height="4.6"/><rect x="234" y="282" width="3.4" height="4.6"/>
+        <rect x="245" y="302" width="3.4" height="4.6"/><rect x="234" y="330" width="3.4" height="4.6"/><rect x="244" y="356" width="3.4" height="4.6"/>
+        <rect x="262" y="294" width="3.4" height="4.6"/><rect x="270" y="312" width="3.4" height="4.6"/><rect x="262" y="344" width="3.4" height="4.6"/>
+        <rect x="286" y="268" width="3.4" height="4.6"/><rect x="298" y="284" width="3.4" height="4.6"/><rect x="286" y="316" width="3.4" height="4.6"/>
+        <rect x="299" y="348" width="3.4" height="4.6"/><rect x="316" y="300" width="3.4" height="4.6"/><rect x="322" y="336" width="3.4" height="4.6"/>
+        <rect x="338" y="280" width="3.4" height="4.6"/><rect x="347" y="304" width="3.4" height="4.6"/><rect x="338" y="344" width="3.4" height="4.6"/>
+        <rect x="550" y="274" width="3.4" height="4.6"/><rect x="560" y="294" width="3.4" height="4.6"/><rect x="550" y="328" width="3.4" height="4.6"/>
+        <rect x="579" y="248" width="3.4" height="4.6"/><rect x="588" y="268" width="3.4" height="4.6"/><rect x="579" y="304" width="3.4" height="4.6"/>
+        <rect x="588" y="344" width="3.4" height="4.6"/><rect x="606" y="290" width="3.4" height="4.6"/><rect x="618" y="310" width="3.4" height="4.6"/>
+        <rect x="606" y="348" width="3.4" height="4.6"/><rect x="637" y="264" width="3.4" height="4.6"/><rect x="647" y="288" width="3.4" height="4.6"/>
+        <rect x="637" y="326" width="3.4" height="4.6"/><rect x="665" y="296" width="3.4" height="4.6"/><rect x="688" y="276" width="3.4" height="4.6"/>
+        <rect x="697" y="308" width="3.4" height="4.6"/><rect x="688" y="348" width="3.4" height="4.6"/>
+      </g>
+      <!-- neon signage (blurred halo + crisp core) -->
+      <g filter="url(#neonBlur)">
+        <rect x="232" y="294" width="20" height="3" fill="#22d3ee"/>
+        <rect x="285" y="328" width="16" height="2.5" fill="#ff2e88"/>
+        <rect x="336" y="308" width="17" height="2.5" fill="#a855f7"/>
+        <rect x="578" y="288" width="18" height="3" fill="#a855f7"/>
+        <rect x="636" y="304" width="19" height="2.5" fill="#22d3ee"/>
+        <rect x="686" y="324" width="16" height="2.5" fill="#ff2e88"/>
+      </g>
+      <g>
+        <rect x="232" y="294" width="20" height="3" fill="#a5f3ff"/>
+        <rect x="285" y="328" width="16" height="2.5" fill="#ffb4d6"/>
+        <rect x="336" y="308" width="17" height="2.5" fill="#dcbcff"/>
+        <rect x="578" y="288" width="18" height="3" fill="#dcbcff"/>
+        <rect x="636" y="304" width="19" height="2.5" fill="#a5f3ff"/>
+        <rect x="686" y="324" width="16" height="2.5" fill="#ffb4d6"/>
+      </g>
+
+      <!-- water -->
+      <rect x="196" y="404" width="508" height="108" fill="url(#water)"/>
+      <!-- sun reflection column -->
+      <g fill="#ffe2c2" opacity=".4">
+        <rect x="428" y="410" width="44" height="2.6"/><rect x="420" y="422" width="60" height="2.6"/>
+        <rect x="432" y="435" width="36" height="2.2"/><rect x="414" y="449" width="72" height="2.2"/>
+        <rect x="430" y="464" width="40" height="2"/>
+      </g>
+      <g stroke="#ffd0e4" stroke-width="1" opacity=".22">
+        <path d="M300 418h240M262 432h330M310 448h230M250 466h360M320 484h220"/>
+      </g>
+
+      <!-- pier + lone figure -->
+      <rect x="470" y="476" width="234" height="36" fill="#070a14"/>
+      <rect x="470" y="476" width="234" height="1.6" fill="#ff2e88" opacity=".45"/>
+      <g fill="#05070f">
+        <ellipse cx="592" cy="476" rx="15" ry="7"/>
+        <path d="M584 476c0-8 3.4-13 8-13s8 5 8 13z"/>
+        <circle cx="592" cy="460" r="4.6"/>
+      </g>
+    </g>
+
+    <!-- ============ arch frame ============ -->
+    <path d="M196 560 V318 A254 254 0 0 1 704 318 V560" fill="none" stroke="#0a0f1e" stroke-width="22"/>
+    <path d="M196 560 V318 A254 254 0 0 1 704 318 V560" fill="none" stroke="#2b3a66" stroke-width="1.8"/>
+    <path d="M185 560 V318 A265 265 0 0 1 715 318 V560" fill="none" stroke="#ff2e88" stroke-width="1.2" opacity=".5"/>
+    <path d="M174 560 V318 A276 276 0 0 1 726 318 V560" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".25"/>
+
+    <!-- outside the arch: dark surround -->
+    <path d="M0 0h185v560H0z M715 0h185v560H715z" fill="#05070f"/>
+    <path d="M185 318 A265 265 0 0 1 715 318 L715 0 L185 0 Z" fill="#05070f"/>
+
+    <!-- vertical Japanese signage panels -->
+    <g>
+      <rect x="228" y="228" width="26" height="134" rx="3" fill="#1a0a20" stroke="#ff2e88" stroke-width="1.1" opacity=".95"/>
+      <text x="241" y="246" fill="#ff9ecb" font-size="14.5" text-anchor="middle" font-family="sans-serif">未</text>
+      <text x="241" y="264" fill="#ff9ecb" font-size="14.5" text-anchor="middle" font-family="sans-serif">来</text>
+      <text x="241" y="282" fill="#ff9ecb" font-size="14.5" text-anchor="middle" font-family="sans-serif">を</text>
+      <text x="241" y="300" fill="#ff9ecb" font-size="14.5" text-anchor="middle" font-family="sans-serif">制</text>
+      <text x="241" y="318" fill="#ff9ecb" font-size="14.5" text-anchor="middle" font-family="sans-serif">御</text>
+      <text x="241" y="336" fill="#ff9ecb" font-size="14.5" text-anchor="middle" font-family="sans-serif">す</text>
+      <text x="241" y="354" fill="#ff9ecb" font-size="14.5" text-anchor="middle" font-family="sans-serif">る</text>
+    </g>
+    <g>
+      <rect x="648" y="212" width="26" height="170" rx="3" fill="#0a1420" stroke="#22d3ee" stroke-width="1.1" opacity=".95"/>
+      <text x="661" y="230" fill="#8ff0ff" font-size="14.5" text-anchor="middle" font-family="sans-serif">シ</text>
+      <text x="661" y="248" fill="#8ff0ff" font-size="14.5" text-anchor="middle" font-family="sans-serif">ス</text>
+      <text x="661" y="266" fill="#8ff0ff" font-size="14.5" text-anchor="middle" font-family="sans-serif">テ</text>
+      <text x="661" y="284" fill="#8ff0ff" font-size="14.5" text-anchor="middle" font-family="sans-serif">ム</text>
+      <text x="661" y="302" fill="#8ff0ff" font-size="14.5" text-anchor="middle" font-family="sans-serif">オ</text>
+      <text x="661" y="320" fill="#8ff0ff" font-size="14.5" text-anchor="middle" font-family="sans-serif">ン</text>
+      <text x="661" y="338" fill="#8ff0ff" font-size="14.5" text-anchor="middle" font-family="sans-serif">ラ</text>
+      <text x="661" y="356" fill="#8ff0ff" font-size="14.5" text-anchor="middle" font-family="sans-serif">イ</text>
+      <text x="661" y="374" fill="#8ff0ff" font-size="14.5" text-anchor="middle" font-family="sans-serif">ン</text>
     </g>
   </svg>
 </template>
 
 <template id="art-athena">
-  <svg viewBox="0 0 340 300" class="athena-svg" aria-hidden="true">
+  <svg viewBox="0 0 340 300" class="mission-svg" aria-hidden="true">
     <defs>
-      <linearGradient id="athBg" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#2f7fe8"/><stop offset="1" stop-color="#1b4fbd"/>
+      <radialGradient id="mcGlow" cx=".5" cy=".5" r=".55">
+        <stop offset="0" stop-color="#ff2e88" stop-opacity=".5"/><stop offset="1" stop-color="#05070f" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="mcRing" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#4d8dff"/><stop offset=".5" stop-color="#a855f7"/><stop offset="1" stop-color="#ff2e88"/>
       </linearGradient>
     </defs>
-    <rect width="340" height="300" rx="6" fill="url(#athBg)"/>
-    <rect x="10" y="10" width="320" height="280" rx="4" fill="none" stroke="#eaf1ff" stroke-width="2" opacity=".85"/>
-    <!-- clouds -->
-    <g fill="none" stroke="#eaf1ff" stroke-width="2.4" opacity=".9" stroke-linecap="round">
-      <path d="M30 250 q24 -22 52 -8 q10 -22 38 -16 q6 -14 26 -12"/>
-      <path d="M200 262 q20 -18 46 -8 q12 -18 40 -10"/>
-      <path d="M40 272 q30 -14 62 -4 M210 280 q28 -12 58 -4"/>
+    <rect width="340" height="300" fill="#05070f"/>
+    <!-- grid floor -->
+    <g stroke="#1b2542" stroke-width=".8" opacity=".8">
+      <path d="M0 230h340M0 250h340M0 272h340M0 296h340"/>
+      <path d="M30 300 90 226M110 300l30-74M170 300v-74M230 300l-30-74M310 300l-60-74"/>
     </g>
-    <!-- spear -->
-    <g stroke="#eaf1ff" stroke-width="4" stroke-linecap="round">
-      <line x1="86" y1="40" x2="102" y2="270"/>
-      <path d="M86 40 l-8 24 8 -6 8 6 z" fill="#eaf1ff"/>
+    <circle cx="170" cy="148" r="120" fill="url(#mcGlow)"/>
+    <!-- rotating target rings -->
+    <circle cx="170" cy="148" r="86" fill="none" stroke="url(#mcRing)" stroke-width="1.6" stroke-dasharray="40 14" opacity=".9"/>
+    <circle cx="170" cy="148" r="66" fill="none" stroke="#4d8dff" stroke-width="1.1" stroke-dasharray="6 7" opacity=".8"/>
+    <circle cx="170" cy="148" r="46" fill="none" stroke="#ff2e88" stroke-width="1.3" stroke-dasharray="22 9" opacity=".9"/>
+    <!-- crosshair -->
+    <g stroke="#ff6ab4" stroke-width="1.3" opacity=".85">
+      <path d="M170 34v26M170 236v-26M56 148h26M284 148h-26"/>
     </g>
-    <!-- Athena profile with Corinthian helmet -->
-    <g fill="none" stroke="#f4f8ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-      <!-- crest -->
-      <path d="M150 34 q64 -26 96 18 q8 12 6 30 l-14 -8 q4 26 -8 40"/>
-      <path d="M158 44 q52 -18 78 16" stroke-width="2.4" opacity=".8"/>
-      <path d="M166 54 q42 -12 62 16" stroke-width="2.4" opacity=".6"/>
-      <!-- helmet + face -->
-      <path d="M150 36 q-28 10 -32 44 q-2 22 10 34 l6 -18 q2 26 16 34"/>
-      <path d="M136 96 q10 -4 18 2 q-2 14 6 22 l-10 30 q14 12 34 8 l10 -26 q16 -4 22 -18 q10 -18 4 -40"/>
-      <path d="M158 106 q6 -6 14 -4" stroke-width="3"/><!-- eye -->
-      <path d="M148 128 q6 8 16 6" stroke-width="3"/><!-- lips -->
-      <!-- neck / drape -->
-      <path d="M184 158 q-4 26 -28 34 q-20 8 -26 28 M196 158 q18 22 44 24"/>
-      <path d="M150 200 q20 14 52 8 q22 -4 34 -18" stroke-width="2.6" opacity=".8"/>
+    <!-- core -->
+    <circle cx="170" cy="148" r="22" fill="#0d1226" stroke="#ff2e88" stroke-width="1.6"/>
+    <circle cx="170" cy="148" r="10" fill="#ff2e88"/>
+    <circle cx="170" cy="148" r="4" fill="#fff"/>
+    <!-- data ticks -->
+    <g fill="#22d3ee" opacity=".9">
+      <rect x="252" y="70" width="26" height="2.5"/><rect x="252" y="78" width="18" height="2.5"/>
+      <rect x="62" y="206" width="22" height="2.5"/><rect x="62" y="214" width="32" height="2.5"/>
     </g>
-    <!-- owl -->
-    <g fill="none" stroke="#f4f8ff" stroke-width="3" stroke-linecap="round">
-      <circle cx="256" cy="212" r="17"/>
-      <path d="M244 204 q6 -10 12 0 q6 -10 12 0"/>
-      <circle cx="250" cy="212" r="2.4" fill="#f4f8ff"/><circle cx="262" cy="212" r="2.4" fill="#f4f8ff"/>
-      <path d="M252 220 l4 4 4 -4 M246 229 q10 8 20 0"/>
+    <g fill="#a855f7" opacity=".8">
+      <rect x="60" y="66" width="30" height="2.5"/><rect x="60" y="74" width="16" height="2.5"/>
     </g>
   </svg>
 </template>

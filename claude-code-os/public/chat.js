@@ -49,7 +49,7 @@
       div.className = 'msg msg-' + role;
       if (role === 'assistant') {
         div.innerHTML = '<div class="who"></div><div class="body"></div>';
-        div.querySelector('.who').textContent = who || opts.agentName || 'HERMES';
+        div.querySelector('.who').textContent = who || opts.agentName || 'JARVIS';
         div.querySelector('.body').textContent = text;
       } else {
         div.textContent = text;

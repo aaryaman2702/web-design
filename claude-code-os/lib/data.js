@@ -1,7 +1,7 @@
 /*
  * Data layer for Claude Code OS.
  * Reads real Claude Code data from ~/.claude (sessions, skills, memory) and
- * falls back to a Hermes-themed demo dataset when nothing is on disk.
+ * falls back to a JARVIS-themed demo dataset when nothing is on disk.
  */
 const fs = require('fs');
 const path = require('path');
@@ -213,7 +213,7 @@ function demoData() {
     'Portfolio rebalance research', 'Inbox triage and reply drafts',
     'Watchlist price alerts review', 'Ad creative A/B analysis',
     'Competitor upload cadence report', 'Trend scan: agentic workflows',
-    'Script outline: memory systems', 'Refactor hermes memory compactor',
+    'Script outline: memory systems', 'Refactor jarvis memory compactor',
   ];
   const models = ['claude-fable-5', 'claude-opus-4-8', 'gpt-5.5'];
   const fileNames = [
@@ -231,7 +231,7 @@ function demoData() {
     const files = new Set();
     const nFiles = 2 + Math.floor(rand() * 5);
     for (let f = 0; f < nFiles; f++) {
-      files.add('~/.hermes/' + fileNames[Math.floor(rand() * fileNames.length)]);
+      files.add('~/.jarvis/' + fileNames[Math.floor(rand() * fileNames.length)]);
     }
     const dayCounts = {};
     for (let d = 0; d < 5; d++) {
@@ -278,7 +278,7 @@ function demoData() {
     skills,
     memoryEntries,
     memoryBytes: Math.floor(MEMORY_QUOTA_BYTES * 0.22),
-    dataDir: '~/.hermes/memories',
+    dataDir: '~/.jarvis/memories',
   };
 }
 
@@ -328,9 +328,9 @@ function summarize() {
   return {
     demo: data.demo,
     dataDir: data.dataDir,
-    agent: { name: 'HERMES-AGENT', display: 'Hermes', status: 'ONLINE' },
-    version: 'V2.10.1',
-    build: '3dbd8e1',
+    agent: { name: 'JARVIS', display: 'J.A.R.V.I.S', status: 'ONLINE' },
+    version: 'v2.10.1',
+    build: '3bd8e1',
     stats: {
       sessions: sessions.length,
       sessionsOnDisk: Math.min(sessions.length, 20),

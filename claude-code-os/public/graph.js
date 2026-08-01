@@ -1,12 +1,12 @@
 /* Force-directed memory graph renderer for Claude Code OS. */
 (function () {
   const COLORS = {
-    core: '#31e0a6',
-    workspace: '#e8e6da',
-    file: '#f0a51e',
-    decision: '#a06df0',
-    session: '#5b8ff5',
-    skill: '#ef5da8',
+    core: '#22d3ee',
+    workspace: '#e9edfa',
+    file: '#ffb020',
+    decision: '#a855f7',
+    session: '#4d8dff',
+    skill: '#ff2e88',
   };
   const RADII = { core: 16, workspace: 7, file: 3.2, decision: 4.2, session: 5, skill: 5.5 };
   // Which node types each layout mode shows
