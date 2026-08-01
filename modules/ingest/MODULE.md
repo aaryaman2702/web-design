@@ -10,7 +10,7 @@ engines: [reflection, curiosity, taste]
 depth: craft
 
 memory:
-  reads:  [self/profile.md, semantic/**]
+  reads:  [inbox/**, self/profile.md, semantic/**]
   writes: [episodes/**, semantic/**, taste/**]
 
 review:
@@ -50,6 +50,20 @@ permanent because nobody goes back and prunes.
 The job is **distillation**, and distillation requires judgment about what
 mattered — which is why this is a module with engines attached rather than a
 script.
+
+## The capture queue
+
+`memory/inbox/` is where raw captures land, written by
+`node scripts/capture.mjs <url|text>` in about a second.
+
+That script is deliberately dumb — it applies no judgment at all. **Friction is
+the only thing that actually kills a memory system**, and every capture path
+requiring a folder choice and frontmatter died at the moment attention was
+elsewhere. So capture is free and thoughtless; this module is where the thinking
+happens, and where most of the queue is discarded.
+
+Drain it with `/ingest` and no argument. Delete each file once processed — a
+queue that never empties stops being read, and then capture stops happening.
 
 ## Sources
 

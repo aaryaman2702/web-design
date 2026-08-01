@@ -12,7 +12,46 @@ a unified memory.
 
 ## Usage
 
-Point it at a file, paste content directly, or name a conversation to distill.
+```bash
+node scripts/capture.mjs --list    # what is queued
+```
+
+With no argument, **drain the inbox** — `memory/inbox/` holds raw captures
+waiting for judgment. Otherwise point it at a file, paste content directly, or
+name a conversation.
+
+## The two-stage split, and why it exists
+
+```
+capture   zero friction, zero judgment, raw     → memory/inbox/
+ingest    full judgment, heavy filter           → the graph
+```
+
+Capture is deliberately dumb: stamp it, queue it, get out of the way. Friction
+is the only thing that actually kills a memory system — every capture path that
+required choosing a folder and writing frontmatter died, not because it was
+wrong but because it was slow at the moment attention was elsewhere.
+
+Ingest is where judgment happens, and it is where **most of the queue gets
+thrown away.** Collapsing the two stages produces exactly the failure this
+module exists to prevent: a graph diluted with sediment that degrades every
+future traversal and that nobody goes back to prune.
+
+## Draining the inbox
+
+For each item in `memory/inbox/`:
+
+1. **Links** — fetch through `web.fetch` and read the whole thing. The captured
+   URL is a pointer, not the content.
+2. **Notes** — read as-is. A one-line note is often a taste judgment or an open
+   question in disguise; classify it properly rather than filing it as an
+   episode by default.
+3. Apply the six-month test, classify, attribute, connect.
+4. **Delete the inbox file once processed.** A queue that never empties stops
+   being read, and then capture stops happening.
+
+If an item does not survive the test, delete it and say so. Discarding is the
+common case and should feel unremarkable.
 
 ## The rule that matters
 

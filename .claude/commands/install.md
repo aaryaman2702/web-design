@@ -45,6 +45,32 @@ module what it should be.
 
 6. **Log** a decision node if this was a real architectural choice.
 
+## Scaffolding from documentation
+
+`/install <name> --from <url-or-path>`
+
+When a capability is defined by someone else's docs — an API, a tool, a
+protocol — read the documentation first and generate the module from it rather
+than from memory of how such things usually work.
+
+1. Fetch the source through `web.fetch`, or read the local file.
+2. **Extract the capability, not the API.** Documentation describes endpoints;
+   a module declares an *effect*. `POST /v1/images/generations` is an endpoint;
+   `media.image` is the capability. Getting this backwards is how a module ends
+   up welded to one vendor's URL shape.
+3. Check whether the capability already exists in `adapters/registry.yaml`.
+   Usually it does, and the work is adding an adapter rather than a module.
+4. Write the procedure from what the docs actually say — auth, rate limits,
+   pagination, error shapes, cost. These are the parts that get guessed wrong
+   from memory and cause failures weeks later.
+5. **Record what the docs did not answer** as `?` in the module. Undocumented
+   behaviour is normal, and a module that pretends certainty about it will fail
+   confusingly rather than cleanly.
+
+The repetition rule still applies. Reading docs is not evidence of need — if
+the work has not been done by hand three times, the module is still
+speculative, and speculative modules are the two currently sitting unused.
+
 ## The rule
 
 If installing this requires editing `core/` or `engines/`, stop. Either the
