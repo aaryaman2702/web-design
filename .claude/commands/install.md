@@ -45,13 +45,18 @@ module what it should be.
 
 6. **Log** a decision node if this was a real architectural choice.
 
-## Scaffolding from documentation
+## Scaffolding from a source
 
-`/install <name> --from <url-or-path>`
+`/install <name> --from <url | path | repo>`
 
-When a capability is defined by someone else's docs — an API, a tool, a
-protocol — read the documentation first and generate the module from it rather
-than from memory of how such things usually work.
+When a capability is defined by someone else's work — an API, a tool, a
+protocol, a repository — read the source first and generate the module from it
+rather than from memory of how such things usually work.
+
+**From a repo**, read in this order: the README for intent, the entry point for
+the real interface, and the tests for the behaviour that is actually guaranteed.
+Tests are the most honest documentation a repository has — a README describes
+what the author hoped, tests describe what they were willing to defend.
 
 1. Fetch the source through `web.fetch`, or read the local file.
 2. **Extract the capability, not the API.** Documentation describes endpoints;
@@ -70,6 +75,12 @@ than from memory of how such things usually work.
 The repetition rule still applies. Reading docs is not evidence of need — if
 the work has not been done by hand three times, the module is still
 speculative, and speculative modules are the two currently sitting unused.
+
+## When the source is your own past work
+
+Use `/learn` instead. It applies the repetition gate first, and separates what
+was invariant across attempts from what changed — a distinction `--from` cannot
+make, because a single source shows only one instance.
 
 ## The rule
 
