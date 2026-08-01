@@ -118,7 +118,7 @@
   <div class="eyebrow">Operator's manual · 2026-07-31</div>
   <h1>JARVIS</h1>
   <p class="dim" style="font-size:17.5px">A cognitive architecture, not an
-  assistant. 20 commits, 74 files, 7 engines, 12 commands, 22 capabilities,
+  assistant. 27 commits, 85 files, 7 engines, 12 commands, 23 capabilities,
   <b>zero dependencies</b>. Everything below is what exists, how it works, and
   the four things still waiting on you.</p>
 </header>
@@ -158,15 +158,16 @@
       </div>
     </li>
 
-    <li class="blocked">
-      <span class="t">Approve the four scheduled routines</span>
-      <span class="mins">~1 min</span>
+    <li>
+      <span class="t">Watch the first successful unattended run</span>
+      <span class="mins">passive</span>
       <div class="d">
-        <p>Attempted three times, blocked at the permission layer each time —
-        I can't self-grant it. Specs are in <code>scripts/routines.md</code>.</p>
-        <p>Capture 21:30 → dream 02:00 → brief 07:00 daily, plus evolution
-        Sunday 10:00, all IST. <b>They need an active Claude plan to fire</b> —
-        see the warning below.</p>
+        <p>All four routines are <b>armed and live</b>. Capture 21:30 → dream
+        02:00 → brief 07:00 daily, plus evolution Sunday 10:00, all IST.</p>
+        <p>Their first attempt <b>failed silently</b> — fresh sessions clone the
+        default branch, where JARVIS doesn't exist. Fixed: every prompt now
+        checks out the branch first and stops loudly if the system isn't there.
+        Confirm tomorrow's brief actually arrives.</p>
       </div>
     </li>
 
@@ -184,11 +185,15 @@
   </ol>
 
   <div class="note bad">
-    <b>Time-sensitive.</b> A cancellation notice shows Claude Pro access ending
-    <b>1 Aug 2026</b> — tomorrow. Scheduled routines run unattended and need an
-    active plan on whichever runtime executes them. Everything else here works
-    regardless; only the automations depend on it. Worth checking before you
-    arm them, so you don't end up trusting a schedule that silently stopped.
+    <b>The lesson from the first unattended run.</b> Both the dream and the
+    brief fired on schedule and produced nothing — and
+    <code>run-audit.mjs</code>, written the day before precisely to catch that,
+    reported "Silent: none" because of two bugs in its own logic.
+    <br><br>
+    Monitoring is code, and code written to check something else is never
+    tested by the thing it monitors. <b>A safeguard that has never fired is a
+    hypothesis.</b> Both are fixed and verified now, but treat any new
+    safeguard here as unproven until you have watched it catch something real.
   </div>
 </section>
 
@@ -313,6 +318,8 @@
     <tr><td><code>/recall &lt;x&gt;</code></td><td>Traverse the graph, not just search it</td><td>"what do I know about…"</td></tr>
     <tr><td><code>/dream</code></td><td>Deep unprompted work on the graph</td><td>overnight, scheduled</td></tr>
     <tr><td><code>/ingest &lt;x&gt;</code></td><td>Pull outside context in, distilled and attributed</td><td>after a council</td></tr>
+    <tr><td><code>/dream</code></td><td>Deep unprompted work on the graph</td><td>overnight, scheduled</td></tr>
+    <tr><td><code>/ingest &lt;x&gt;</code></td><td>Pull outside context in, distilled and attributed</td><td>after a council</td></tr>
     <tr><td><code>/evolve</code></td><td>What should change about this system</td><td>weekly</td></tr>
     <tr><td><code>/install &lt;x&gt;</code></td><td>Scaffold a contract-compliant module</td><td>work repeated 3×</td></tr>
   </table></div>
@@ -328,7 +335,7 @@
 <section>
   <div class="head">
     <h2>Tools and capabilities</h2>
-    <p class="dim">22 capabilities bound, 2 deliberately unbound. Modules ask for
+    <p class="dim">23 capabilities bound, 2 deliberately unbound. Modules ask for
     the left column; only <code>adapters/registry.yaml</code> knows the right.</p>
   </div>
 
@@ -384,6 +391,9 @@ node scripts/doctor.mjs        # verify the architecture holds → PASS</code></
       the rule, on its first run.</p>
       <p><code>graph-report.mjs</code> — contradictions, orphans, distant pairs,
       stale beliefs. Found four orphans on its first run.</p>
+      <p><code>run-audit.mjs</code> — what failed, went silent, was never used.
+      Caught two unused modules on its first run, and its own blind spot on its
+      second.</p>
       <p><code>council.mjs</code> — compiles a question for another model.</p>
       <p><code>context-pack.mjs</code> — exports a graph region for anything.</p>
       <p><code>dashboard.mjs</code> — regenerates the instrument panel.</p>
